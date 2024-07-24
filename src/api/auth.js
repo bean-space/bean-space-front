@@ -27,6 +27,7 @@ export const getUserInfo = async () => {
   }
 };
 
+
 export const socialLogin = async (code) => {
   try {
     const { data } = await authClient.get(

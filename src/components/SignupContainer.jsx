@@ -108,25 +108,25 @@ const SignupContainer = () => {
                 margin="normal"
                 required
                 fullWidth
-                name="passwordConfirmation"
-                label="비밀번호"
-                type="password"
-                id="passwordConfirmation"
-                autoComplete="current-password"
-                value={passwordConfirmation}
-                onChange={(e) => setPasswordConfirmation(e.target.value)}
-              />
-              <TextField
-                margin="normal"
-                required
-                fullWidth
                 name="password"
-                label="비밀번호 확인"
+                label="비밀번호"
                 type="password"
                 id="password"
                 autoComplete="current-password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+              />
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                name="PasswordConfirmation"
+                label="비밀번호 확인"
+                type="password"
+                id="PasswordConfirmation"
+                autoComplete="current-password"
+                value={PasswordConfirmation}
+                onChange={(e) => setPasswordConfirmation(e.target.value)}
               />
               <TextField
                 margin="normal"
@@ -140,7 +140,6 @@ const SignupContainer = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
-
               <Button
                 type="submit"
                 fullWidth
