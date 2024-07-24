@@ -14,7 +14,7 @@ import {
   Typography,
 } from "@mui/material";
 import LockOpenTwoToneIcon from "@mui/icons-material/LockOpenTwoTone";
-import KakaoLogo from "../assets/kakao_login_large_wide.png";
+import KakaoIcon from "../assets/kakao-logo.png";
 
 const LoginContainer = () => {
   const defaultTheme = createTheme();
@@ -51,11 +51,14 @@ const LoginContainer = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (!phoneNumber || !password) {
+      alert("모든 필드를 입력해주세요.");
+      return;
+    }
+
     const success = await login({ phoneNumber, password });
     if (success) {
       navigate("/");
-    } else {
-      alert("로그인에 실패하였습니다!");
     }
   };
 
@@ -68,7 +71,7 @@ const LoginContainer = () => {
       <Grid
         container
         component="main"
-        sx={{ height: "65vh" }}
+        sx={{ height: "60vh" }}
         justifyContent="center"
       >
         <CssBaseline />
@@ -138,28 +141,33 @@ const LoginContainer = () => {
                 로그인
               </Button>
               <Button
+                onClick={handleButtonClick}
+                type="submit"
                 fullWidth
                 variant="contained"
                 color="primary"
                 sx={{
-                  mt: 3,
-                  mb: 3,
-                  backgroundImage: `url(${KakaoLogo})`,
-                  backgroundSize: "cover",
-                  backgroundPosition: "center",
-
-                  minWidth: "40px",
-                  minHeight: "40px",
-                  "&:hover": {
-                    backgroundImage: `url(${KakaoLogo})`,
-                  },
+                  mt: 2,
+                  fontSize: "1rem",
+                  backgroundColor: "#eeeeee",
+                  color: "#000000",
+                  "&:hover": { backgroundColor: "gold" },
                 }}
-                onClick={handleButtonClick}
-              ></Button>
+                startIcon={
+                  <img
+                    src={KakaoIcon}
+                    alt="Kakao"
+                    style={{ width: "20px", height: "20px" }}
+                  />
+                }
+              >
+                카카오 로그인
+              </Button>
               <Grid container>
                 <Grid item xs={12} container justifyContent="center">
                   <Box
                     sx={{
+                      mt: 2.5,
                       position: "relative",
                       display: "inline-flex",
                       alignItems: "center",
@@ -168,7 +176,7 @@ const LoginContainer = () => {
                         content: '""',
                         position: "absolute",
                         top: "50%",
-                        width: "60%",
+                        width: "50%",
                         borderTop: "1px solid rgba(0, 0, 0, 0.7)",
                       },
                       "&::before": {
@@ -197,7 +205,7 @@ const LoginContainer = () => {
                 fullWidth
                 variant="contained"
                 color="primary"
-                sx={{ mt: 3, fontSize: "1rem" }}
+                sx={{ mt: 2, fontSize: "1rem" }}
                 onClick={handleSignupClick}
               >
                 회원가입

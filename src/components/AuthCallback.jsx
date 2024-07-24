@@ -12,8 +12,10 @@ const AuthCallback = () => {
 
     if (code) {
       kakaoSocialLogin(code);
+      alert("회원가입에 성공하였습니다. 메인페이지로 이동합니다");
       navigate("/");
     } else {
+      alert("회원가입에 실패하였습니다.");
       navigate("/login");
     }
   }, [kakaoSocialLogin, navigate]);
