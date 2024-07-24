@@ -7,7 +7,11 @@ export const loginUser = async (login) => {
     localStorage.setItem("token", accessToken);
     return { success: true };
   } catch (error) {
-    console.error("Login failed:", error);
+    if (error.response.data.msg) {
+      alert(error.response.data.msg);
+    } else {
+      alert("로그인에 실패하였습니다!");
+    }
     return { success: false };
   }
 };
@@ -22,11 +26,9 @@ export const getUserInfo = async () => {
     const { nickname, profileImageUrl, role } = data;
     return { success: true, nickname, profileImageUrl, role };
   } catch (error) {
-    console.error("Get Info failed:", error);
     return { success: false };
   }
 };
-
 
 export const socialLogin = async (code) => {
   try {
@@ -37,7 +39,12 @@ export const socialLogin = async (code) => {
     localStorage.setItem("token", accessToken);
     return { success: true };
   } catch (error) {
-    console.error("Get Info failed:", error);
     return { success: false };
   }
+};
+
+export const signupUser = async (member) => {
+  const response = await authClient.post("api/v1/auth/sign-up", member);
+
+  return response;
 };
