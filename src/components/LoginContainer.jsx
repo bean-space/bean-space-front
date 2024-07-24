@@ -142,7 +142,6 @@ const LoginContainer = () => {
               </Button>
               <Button
                 onClick={handleButtonClick}
-                type="submit"
                 fullWidth
                 variant="contained"
                 color="primary"

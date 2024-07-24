@@ -137,7 +137,6 @@ const SignupContainer = () => {
       return;
     }
 
-    // 이메일 형식 검사
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       alert("올바른 이메일 형식을 입력해주세요.");
       return;
@@ -162,8 +161,9 @@ const SignupContainer = () => {
     } catch (error) {
       if (error.response.data.msg) {
         alert(error.response.data.msg);
+      } else {
+        alert("회원가입에 실패하였습니다. 다시 시도해주세요");
       }
-      alert("회원가입에 실패하였습니다. 다시 시도해주세요");
       return;
     }
   };
