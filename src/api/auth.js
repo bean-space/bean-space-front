@@ -26,3 +26,18 @@ export const getUserInfo = async () => {
     return { success: false };
   }
 };
+
+
+export const socialLogin = async (code) => {
+  try {
+    const { data } = await authClient.get(
+      `/oauth2/login/callback?code=${code}`
+    );
+    const { accessToken } = data;
+    localStorage.setItem("token", accessToken);
+    return { success: true };
+  } catch (error) {
+    console.error("Get Info failed:", error);
+    return { success: false };
+  }
+};

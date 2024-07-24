@@ -1,5 +1,5 @@
 import { useState, useEffect, createContext } from "react";
-import { getUserInfo, loginUser, logoutUser } from "../api/auth";
+import { getUserInfo, loginUser, logoutUser, socialLogin } from "../api/auth";
 
 const AuthContext = createContext(null);
 
@@ -60,8 +60,18 @@ export const AuthProvider = ({ children }) => {
     });
   };
 
+  const kakaoSocialLogin = async (code) => {
+    const result = await socialLogin(code);
+    if (result.success) {
+      await fetchUserInfo();
+    }
+    return result.success;
+  };
+
   return (
-    <AuthContext.Provider value={{ ...authState, login, logout }}>
+    <AuthContext.Provider
+      value={{ ...authState, login, logout, kakaoSocialLogin }}
+    >
       {children}
     </AuthContext.Provider>
   );

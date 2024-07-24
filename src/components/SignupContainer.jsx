@@ -23,6 +23,8 @@ const SignupContainer = () => {
 
   const [phoneNumber, setPhoneNumber] = useState("");
   const [password, setPassword] = useState("");
+  const [passwordConfirmation, setPasswordConfirmation] = useState("");
+  const [email, setEmail] = useState("");
 
   useEffect(() => {
     if (isLoggedIn) {
@@ -114,7 +116,30 @@ const SignupContainer = () => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
-
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                name="PasswordConfirmation"
+                label="비밀번호 확인"
+                type="password"
+                id="PasswordConfirmation"
+                autoComplete="current-password"
+                value={PasswordConfirmation}
+                onChange={(e) => setPasswordConfirmation(e.target.value)}
+              />
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                name="email"
+                label="이메일"
+                type="email"
+                id="email"
+                autoComplete="current-email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
               <Button
                 type="submit"
                 fullWidth
@@ -142,51 +167,6 @@ const SignupContainer = () => {
                   },
                 }}
               ></Button>
-              <Grid container>
-                <Grid item xs={12} container justifyContent="center">
-                  <Box
-                    sx={{
-                      position: "relative",
-                      display: "inline-flex",
-                      alignItems: "center",
-                      textAlign: "center",
-                      "&::before, &::after": {
-                        content: '""',
-                        position: "absolute",
-                        top: "50%",
-                        width: "60%",
-                        borderTop: "1px solid rgba(0, 0, 0, 0.7)",
-                      },
-                      "&::before": {
-                        right: "100%",
-                        marginRight: "8px",
-                      },
-                      "&::after": {
-                        left: "100%",
-                        marginLeft: "8px",
-                      },
-                    }}
-                  >
-                    <Typography
-                      sx={{
-                        fontSize: "0.875rem",
-                        color: "rgba(0, 0, 0, 0.7)",
-                        margin: 0,
-                      }}
-                    >
-                      아직 회원이 아니라면
-                    </Typography>
-                  </Box>
-                </Grid>
-              </Grid>
-              <Button
-                fullWidth
-                variant="contained"
-                color="primary"
-                sx={{ mt: 3, fontSize: "1rem" }}
-              >
-                회원가입
-              </Button>
             </Box>
           </Box>
         </Grid>
