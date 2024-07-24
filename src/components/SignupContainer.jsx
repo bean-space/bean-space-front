@@ -369,7 +369,6 @@ const SignupContainer = () => {
               </Button>
               <Button
                 onClick={handleButtonClick}
-                type="submit"
                 fullWidth
                 variant="contained"
                 color="primary"
