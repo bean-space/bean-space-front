@@ -2,7 +2,7 @@ import MainCard from "../components/MainCards";
 
 const MainPage = () => {
   return (
-    <div style={{ flex: 1, margin: "200px 0 0 0" }}>
+    <div style={{ margin: "100px 0 0 0" }}>
       <MainCard />
     </div>
   );

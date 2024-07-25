@@ -4,7 +4,7 @@ import SpaceCard from "./SpaceCard";
 
 export default function MainCard() {
   return (
-    <Box sx={{ flexGrow: 1 }}>
+    <Box style={{ flex: 1, margin: "100px 0 0 0" }}>
       <Grid container spacing={2} minHeight={160}>
         <Grid xs display="flex" justifyContent="center" alignItems="center">
           <SpaceCard />

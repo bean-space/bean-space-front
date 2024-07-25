@@ -93,7 +93,7 @@ const LoginContainer = () => {
               alignItems: "center",
             }}
           >
-            <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
+            <Avatar sx={{ m: 1, bgcolor: "#87CEEB" }}>
               <LockOpenTwoToneIcon />
             </Avatar>
             <Typography component="h1" variant="h5">
@@ -136,7 +136,13 @@ const LoginContainer = () => {
                 fullWidth
                 variant="contained"
                 color="success"
-                sx={{ mt: 3, fontSize: "1rem" }}
+                sx={{
+                  mt: 3,
+                  fontSize: "1rem",
+                  textShadow: "#000 0.7px 0.5px 2px",
+                  backgroundColor: "#87CEEB",
+                  "&:hover": { backgroundColor: "#2AAADE" },
+                }}
               >
                 로그인
               </Button>
@@ -204,7 +210,11 @@ const LoginContainer = () => {
                 fullWidth
                 variant="contained"
                 color="primary"
-                sx={{ mt: 2, fontSize: "1rem" }}
+                sx={{
+                  mt: 2,
+                  fontSize: "1rem",
+                  textShadow: "0.5px 0.5px 0.5px #000",
+                }}
                 onClick={handleSignupClick}
               >
                 회원가입
