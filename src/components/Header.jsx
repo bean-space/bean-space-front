@@ -13,7 +13,8 @@ import MenuItem from "@mui/material/MenuItem";
 import LogoSrc from "../assets/logo.svg";
 import VpnKeyTwoToneIcon from "@mui/icons-material/VpnKeyTwoTone";
 import { useAuth } from "../hooks/useAuth";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import defaultProfile from "../assets/default_profile_image.webp";
 
 function Header() {
   const { role } = useAuth();
@@ -25,6 +26,8 @@ function Header() {
       return <HostHeader />;
     case "ADMIN":
       return <AdminHeader />;
+    case null:
+      return <LoggedOutHeader />;
     default:
       return <LoggedOutHeader />;
   }
@@ -41,33 +44,39 @@ const LoggedOutHeader = () => {
     <AppBar position="fixed" sx={{ backgroundColor: "#F7EFDC" }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <a href="/" style={{ textDecoration: "none" }}>
+          <Link to={"/"} style={{ textDecoration: "none" }}>
             <img
               src={LogoSrc}
               alt="Logo"
               style={{ height: 40, marginRight: 5 }}
             />
-          </a>
-          <Typography
-            variant="h6"
-            noWrap
-            component="a"
-            href="/"
-            sx={{
-              mr: 2,
-              color: "black",
-              textDecoration: "none",
-              marginRight: 10,
-            }}
-          >
-            빈 공간 - Bean Space
-          </Typography>
+          </Link>
+          <Link to={"/"} style={{ textDecoration: "none" }}>
+            <Typography
+              variant="h6"
+              noWrap
+              sx={{
+                mr: 2,
+                color: "black",
+                textDecoration: "none",
+                marginRight: 10,
+              }}
+            >
+              빈 공간 - Bean Space
+            </Typography>
+          </Link>
           <Box sx={{ flexGrow: 1 }} />
           <Button
             onClick={handleLoginClick}
             variant="contained"
             endIcon={<VpnKeyTwoToneIcon />}
             color="success"
+            sx={{
+              color: "#405761",
+              bgcolor: "#87CEEB",
+              textShadow: "0.5px 0.5px 2px #EEE",
+              "&:hover": { backgroundColor: "#2AAADE" },
+            }}
           >
             로그인
           </Button>
@@ -100,38 +109,31 @@ const MemberHeader = () => {
     <AppBar position="fixed" sx={{ backgroundColor: "#F7EFDC" }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <a href="/" style={{ textDecoration: "none" }}>
+          <Link to={"/"} style={{ textDecoration: "none" }}>
             <img
               src={LogoSrc}
               alt="Logo"
               style={{ height: 40, marginRight: 5 }}
             />
-          </a>
-          <Typography
-            variant="h6"
-            noWrap
-            component="a"
-            href="/"
-            sx={{
-              mr: 2,
-              color: "black",
-              textDecoration: "none",
-              marginRight: 10,
-            }}
-          >
-            빈 공간 - Bean Space
-          </Typography>
-
+          </Link>
+          <Link to={"/"} style={{ textDecoration: "none" }}>
+            <Typography
+              variant="h6"
+              noWrap
+              sx={{
+                mr: 2,
+                color: "black",
+                textDecoration: "none",
+                marginRight: 10,
+              }}
+            >
+              빈 공간 - Bean Space
+            </Typography>
+          </Link>
           <Box sx={{ flexGrow: 1 }} />
           <Tooltip title="메뉴">
             <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-              <Avatar
-                alt={nickname}
-                src={
-                  profileImageUrl ||
-                  "https://i.namu.wiki/i/F54BNI6mtxrgPiZAXdTXm_IOFeWtcPMOEGdixEcxQsJhNrygvwKOMm5R14rUWdWakFIoJKa-j8ZO3-HUNbBuzw.webp"
-                }
-              />
+              <Avatar alt={nickname} src={profileImageUrl || defaultProfile} />
             </IconButton>
           </Tooltip>
           <Menu
@@ -191,27 +193,27 @@ const HostHeader = () => {
     <AppBar position="fixed" sx={{ backgroundColor: "#F7EFDC" }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <a href="/" style={{ textDecoration: "none" }}>
+          <Link to={"/"} style={{ textDecoration: "none" }}>
             <img
               src={LogoSrc}
               alt="Logo"
               style={{ height: 40, marginRight: 5 }}
             />
-          </a>
-          <Typography
-            variant="h6"
-            noWrap
-            component="a"
-            href="/"
-            sx={{
-              mr: 2,
-              color: "black",
-              textDecoration: "none",
-              marginRight: 10,
-            }}
-          >
-            빈 공간 - Bean Space
-          </Typography>
+          </Link>
+          <Link to={"/"} style={{ textDecoration: "none" }}>
+            <Typography
+              variant="h6"
+              noWrap
+              sx={{
+                mr: 2,
+                color: "black",
+                textDecoration: "none",
+                marginRight: 10,
+              }}
+            >
+              빈 공간 - Bean Space
+            </Typography>
+          </Link>
 
           <Box sx={{ flexGrow: 1, display: "flex", flexDirection: "row" }}>
             {hostPages.map((page) => (
@@ -235,10 +237,7 @@ const HostHeader = () => {
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                 <Avatar
                   alt={nickname}
-                  src={
-                    profileImageUrl ||
-                    "https://i.namu.wiki/i/F54BNI6mtxrgPiZAXdTXm_IOFeWtcPMOEGdixEcxQsJhNrygvwKOMm5R14rUWdWakFIoJKa-j8ZO3-HUNbBuzw.webp"
-                  }
+                  src={profileImageUrl || defaultProfile}
                 />
               </IconButton>
             </Tooltip>
@@ -300,27 +299,27 @@ const AdminHeader = () => {
     <AppBar position="fixed" sx={{ backgroundColor: "#F7EFDC" }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <a href="/" style={{ textDecoration: "none" }}>
+          <Link to={"/"} style={{ textDecoration: "none" }}>
             <img
               src={LogoSrc}
               alt="Logo"
               style={{ height: 40, marginRight: 5 }}
             />
-          </a>
-          <Typography
-            variant="h6"
-            noWrap
-            component="a"
-            href="/"
-            sx={{
-              mr: 2,
-              color: "black",
-              textDecoration: "none",
-              marginRight: 10,
-            }}
-          >
-            빈 공간 - Bean Space
-          </Typography>
+          </Link>
+          <Link to={"/"} style={{ textDecoration: "none" }}>
+            <Typography
+              variant="h6"
+              noWrap
+              sx={{
+                mr: 2,
+                color: "black",
+                textDecoration: "none",
+                marginRight: 10,
+              }}
+            >
+              빈 공간 - Bean Space
+            </Typography>
+          </Link>
 
           <Box sx={{ flexGrow: 1, display: "flex", flexDirection: "row" }}>
             {adminPages.map((page) => (
@@ -344,10 +343,7 @@ const AdminHeader = () => {
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                 <Avatar
                   alt={nickname}
-                  src={
-                    profileImageUrl ||
-                    "https://i.namu.wiki/i/F54BNI6mtxrgPiZAXdTXm_IOFeWtcPMOEGdixEcxQsJhNrygvwKOMm5R14rUWdWakFIoJKa-j8ZO3-HUNbBuzw.webp"
-                  }
+                  src={profileImageUrl || defaultProfile}
                 />
               </IconButton>
             </Tooltip>

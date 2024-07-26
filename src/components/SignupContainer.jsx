@@ -205,7 +205,7 @@ const SignupContainer = () => {
               alignItems: "center",
             }}
           >
-            <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
+            <Avatar sx={{ m: 1, bgcolor: "#87CEEB" }}>
               <AssignmentIndTwoToneIcon />
             </Avatar>
             <Typography component="h1" variant="h5">
@@ -363,7 +363,14 @@ const SignupContainer = () => {
                 fullWidth
                 variant="contained"
                 color="success"
-                sx={{ mt: 1, fontSize: "1rem" }}
+                sx={{
+                  mt: 1,
+                  fontSize: "1rem",
+                  backgroundColor: "#F17D7B",
+                  textShadow: "0.5px 0.5px 0.5px #000",
+                  color: "white",
+                  "&:hover": { backgroundColor: "#F05552" },
+                }}
               >
                 회원가입 완료
               </Button>
