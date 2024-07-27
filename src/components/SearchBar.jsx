@@ -1,24 +1,27 @@
 import { Box, IconButton, Paper, Tooltip } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import PeopleCountDropdown from "./PeopleCountDropdown";
-import { useState } from "react";
 import DateRangePicker from "./DateRangePicker";
-import { addDays, startOfTomorrow } from "date-fns";
 import SidoDropdown from "./SidoDropdown";
 import { useNavigate } from "react-router-dom";
+import { useSearch } from "../hooks/useSearch";
 
 const SearchBar = () => {
-  const [searchSido, setSearchSido] = useState("전체");
-  const [peopleCount, setPeopleCount] = useState(1);
-  const [dateRange, setDateRange] = useState({
-    startDate: startOfTomorrow(),
-    endDate: addDays(startOfTomorrow(), 1),
-    key: "selection",
-  });
+  const { searchState, setSearchState } = useSearch();
+  const { searchSido, peopleCount, dateRange } = searchState;
+
   const navigate = useNavigate();
 
   const handleDateRangeChange = (newDateRange) => {
-    setDateRange(newDateRange);
+    setSearchState((prev) => ({ ...prev, dateRange: newDateRange }));
+  };
+
+  const handleSidoChange = (newSido) => {
+    setSearchState((prev) => ({ ...prev, searchSido: newSido }));
+  };
+
+  const handlePeopleCountChange = (newCount) => {
+    setSearchState((prev) => ({ ...prev, peopleCount: newCount }));
   };
 
   const formatDate = (date) => {
@@ -46,6 +49,7 @@ const SearchBar = () => {
       checkOut: formattedEndDate,
       headCount: peopleCount,
       page: 1,
+      sort: "createdAt,DESC",
       ...(sido && { sido: sido }),
     });
 
@@ -83,12 +87,11 @@ const SearchBar = () => {
             alignItems: "center",
           }}
         >
-          <SidoDropdown sido={searchSido} setSido={setSearchSido} />
+          <SidoDropdown sido={searchSido} setSido={handleSidoChange} />
         </Box>
 
         <Box
           sx={{
-            borderLeft: "1px solid #e0e0e0",
             flex: "0 0 40%",
             display: "flex",
             alignItems: "center",
@@ -115,7 +118,10 @@ const SearchBar = () => {
             alignItems: "center",
           }}
         >
-          <PeopleCountDropdown count={peopleCount} setCount={setPeopleCount} />
+          <PeopleCountDropdown
+            count={peopleCount}
+            setCount={handlePeopleCountChange}
+          />
         </Box>
         <Tooltip title="검색하기">
           <IconButton
