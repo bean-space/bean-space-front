@@ -48,6 +48,18 @@ const LoginContainer = () => {
     }
   }, [isLoggedIn, navigate]);
 
+  useEffect(() => {
+    if (isLoggedIn) {
+      const previousUrl = localStorage.getItem("previousUrl");
+      if (previousUrl) {
+        localStorage.removeItem("previousUrl");
+        navigate(previousUrl);
+      } else {
+        navigate("/");
+      }
+    }
+  }, [isLoggedIn, navigate]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -58,7 +70,13 @@ const LoginContainer = () => {
 
     const success = await login({ phoneNumber, password });
     if (success) {
-      navigate("/");
+      const previousUrl = localStorage.getItem("previousUrl");
+      if (previousUrl) {
+        localStorage.removeItem("previousUrl");
+        navigate(previousUrl);
+      } else {
+        navigate("/");
+      }
     }
   };
 
