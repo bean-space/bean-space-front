@@ -9,7 +9,7 @@ import {
   Paper,
 } from "@mui/material";
 import defaulImage from "../assets/default_house_pic.jpg";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 const sidoOptions = [
   { display: "전체", value: "전체" },
@@ -38,6 +38,18 @@ const modifySido = (sido) => {
 };
 
 const SpaceCardList = ({ spaces }) => {
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const checkIn = queryParams.get("checkIn");
+  const checkOut = queryParams.get("checkOut");
+  const headCount = queryParams.get("headCount");
+
+  const newQueryString = new URLSearchParams({
+    checkIn: checkIn || "",
+    checkOut: checkOut || "",
+    headCount: headCount || "",
+  }).toString();
+
   return (
     <Container maxWidth="xl" sx={{ marginTop: "1%" }}>
       <Grid container spacing={3}>
@@ -98,7 +110,7 @@ const SpaceCardList = ({ spaces }) => {
               </Box>
               <CardContent>
                 <Link
-                  to={`/space/${space.id}`}
+                  to={`/space/${space.id}?${newQueryString}`}
                   style={{ textDecoration: "none" }}
                 >
                   <Typography

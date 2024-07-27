@@ -1,51 +1,82 @@
 import { useState, useEffect, useRef } from "react";
 import { DateRange } from "react-date-range";
-import { addDays, addMonths, format, isBefore, isAfter } from "date-fns";
+import {
+  addDays,
+  addMonths,
+  format,
+  parseISO,
+  isBefore,
+  isAfter,
+} from "date-fns";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 import { ko } from "date-fns/locale";
 import { Box, Typography, Divider } from "@mui/material";
 
-const DateRangePicker = ({ dateRange, onDateRangeChange }) => {
+const DateRangePickerForSpaceDetail = ({
+  initialCheckIn,
+  initialCheckOut,
+  reservedDateList,
+  onDateRangeChange,
+}) => {
   const [showCalendar, setShowCalendar] = useState(false);
   const calendarRef = useRef(null);
-  const [currentDateRange, setCurrentDateRange] = useState(dateRange);
+  const [dateRange, setDateRange] = useState({
+    startDate: initialCheckIn
+      ? initialCheckIn instanceof Date
+        ? initialCheckIn
+        : new Date(initialCheckIn)
+      : null,
+    endDate: initialCheckOut
+      ? initialCheckOut instanceof Date
+        ? initialCheckOut
+        : new Date(initialCheckOut)
+      : null,
+    key: "selection",
+  });
+
+  const isDateReserved = (date) => {
+    return reservedDateList.some(
+      (reservedDate) =>
+        format(new Date(reservedDate), "yyyy-MM-dd") ===
+        format(date, "yyyy-MM-dd")
+    );
+  };
 
   const handleSelect = (ranges) => {
     const { startDate, endDate } = ranges.selection;
 
-    if (!currentDateRange.startDate) {
-      setCurrentDateRange({ ...currentDateRange, startDate });
-    } else if (!currentDateRange.endDate) {
-      if (
-        isAfter(endDate, currentDateRange.startDate) &&
-        !isDateDisabled(endDate)
-      ) {
-        setCurrentDateRange({ ...currentDateRange, endDate });
-        onDateRangeChange({ startDate: currentDateRange.startDate, endDate });
+    if (!dateRange.startDate) {
+      setDateRange({ ...dateRange, startDate });
+    } else if (!dateRange.endDate) {
+      if (isAfter(endDate, dateRange.startDate) && !isDateDisabled(endDate)) {
+        setDateRange({ ...dateRange, endDate });
+        onDateRangeChange({ startDate: dateRange.startDate, endDate });
         setShowCalendar(false);
       }
     }
   };
 
   const isDateDisabled = (date) => {
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
+    if (isBefore(date, new Date())) return true;
 
-    if (isBefore(date, today)) return true;
-
-    const sixMonthsLater = addMonths(today, 6);
-    if (isAfter(date, sixMonthsLater)) return true;
-
-    if (!currentDateRange.startDate) {
-      return false;
+    if (!dateRange.startDate) {
+      return isDateReserved(date);
     } else {
-      return isBefore(date, addDays(currentDateRange.startDate, 1));
+      const nextReservedDate = reservedDateList
+        .map((d) => parseISO(d))
+        .filter((d) => isAfter(d, dateRange.startDate))
+        .sort((a, b) => a - b)[0];
+
+      return (
+        isBefore(date, addDays(dateRange.startDate, 1)) ||
+        (nextReservedDate && isAfter(date, nextReservedDate))
+      );
     }
   };
 
   const handleCalendarOpen = () => {
-    setCurrentDateRange({ startDate: null, endDate: null, key: "selection" });
+    setDateRange({ startDate: null, endDate: null, key: "selection" });
     setShowCalendar(true);
   };
 
@@ -63,24 +94,21 @@ const DateRangePicker = ({ dateRange, onDateRangeChange }) => {
   }, []);
 
   return (
-    <Box
-      sx={{
-        alignContent: "center",
-        width: "100%",
-      }}
-    >
+    <Box>
       <Box
         onClick={handleCalendarOpen}
         sx={{
           cursor: "pointer",
           padding: "10px",
+          border: "1px solid #ccc",
+          borderRadius: "4px",
           "&:hover": {
             backgroundColor: "#f5f5f5",
           },
         }}
       >
         <Box display="flex" justifyContent="space-between" alignItems="center">
-          <Box flex={1} sx={{ textAlign: "center" }}>
+          <Box flex={1}>
             <Typography variant="caption" color="textSecondary">
               체크인
             </Typography>
@@ -93,7 +121,7 @@ const DateRangePicker = ({ dateRange, onDateRangeChange }) => {
             </Typography>
           </Box>
           <Divider orientation="vertical" flexItem sx={{ mx: 2 }} />
-          <Box flex={1} sx={{ textAlign: "center" }}>
+          <Box flex={1}>
             <Typography variant="caption" color="textSecondary">
               체크아웃
             </Typography>
@@ -118,18 +146,18 @@ const DateRangePicker = ({ dateRange, onDateRangeChange }) => {
           }}
         >
           <DateRange
-            ranges={[currentDateRange]}
+            ranges={[dateRange]}
             onChange={handleSelect}
-            minDate={addDays(new Date(), 1)}
+            minDate={new Date()}
             maxDate={addMonths(new Date(), 6)}
             months={2}
             direction="horizontal"
             locale={ko}
             dateDisplayFormat="yyyy년 MM월 dd일"
             disabledDay={isDateDisabled}
+            rangeColors={["#87CEEB"]}
             startDatePlaceholder="체크인"
             endDatePlaceholder="체크아웃"
-            rangeColors={["#87CEEB"]}
           />
         </Box>
       )}
@@ -137,4 +165,4 @@ const DateRangePicker = ({ dateRange, onDateRangeChange }) => {
   );
 };
 
-export default DateRangePicker;
+export default DateRangePickerForSpaceDetail;

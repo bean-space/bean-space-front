@@ -3,9 +3,6 @@ import axios from "axios";
 export const authClient = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
   withCredentials: true,
-  headers: {
-    "Access-Control-Allow-Origin": "*",
-  },
 });
 
 authClient.interceptors.request.use((config) => {
