@@ -11,6 +11,11 @@ import {
   Button,
   Box,
   Divider,
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  DialogContentText,
+  DialogActions,
 } from "@mui/material";
 import { useLocation, useNavigate } from "react-router-dom";
 import defaulImage from "../assets/default_house_pic.jpg";
@@ -26,6 +31,7 @@ const ReservationPage = () => {
   const [extraPersonCharge, setExtraPersonCharge] = useState(0);
   const [discountAmount, setDiscountAmount] = useState(0);
   const [totalPrice, setTotalPrice] = useState(0);
+  const [openModal, setOpenModal] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -103,9 +109,15 @@ const ReservationPage = () => {
     setAvailableCoupons(availableCoupons);
   };
 
-  const handleReservation = async (e) => {
-    e.preventDefault();
+  const handleOpenModal = () => {
+    setOpenModal(true);
+  };
 
+  const handleCloseModal = () => {
+    setOpenModal(false);
+  };
+
+  const handleReservation = async () => {
     if (!isCouponValid()) {
       alert("쿠폰의 유효기간을 확인해주세요!");
       return;
@@ -144,6 +156,30 @@ const ReservationPage = () => {
   const handleGoBack = () => {
     navigate(-1);
   };
+
+  const ReservationConfirmModal = () => (
+    <Dialog
+      open={openModal}
+      onClose={handleCloseModal}
+      aria-labelledby="alert-dialog-title"
+      aria-describedby="alert-dialog-description"
+    >
+      <DialogTitle id="alert-dialog-title">{"예약 확인"}</DialogTitle>
+      <DialogContent>
+        <DialogContentText id="alert-dialog-description">
+          예약을 확정하시겠습니까?
+        </DialogContentText>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={handleCloseModal} color="primary">
+          취소
+        </Button>
+        <Button onClick={handleReservation} color="primary" autoFocus>
+          예약하기
+        </Button>
+      </DialogActions>
+    </Dialog>
+  );
 
   if (!space) return <div>로딩 중...</div>;
 
@@ -396,7 +432,7 @@ const ReservationPage = () => {
           <Button
             variant="contained"
             color="primary"
-            onClick={handleReservation}
+            onClick={handleOpenModal}
             sx={{
               fontSize: "1rem",
               textShadow: "#000 0.7px 0.5px 2px",
@@ -408,6 +444,7 @@ const ReservationPage = () => {
           </Button>
         </Box>
       </Paper>
+      <ReservationConfirmModal />
     </Container>
   );
 };
