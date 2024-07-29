@@ -53,7 +53,7 @@ const SearchBar = () => {
       ...(sido && { sido: sido }),
     });
 
-    navigate(`/space.search?${queryParam.toString()}`);
+    navigate(`/space/search?${queryParam.toString()}`);
   };
 
   return (

@@ -13,7 +13,7 @@ import MenuItem from "@mui/material/MenuItem";
 import LogoSrc from "../assets/logo.svg";
 import VpnKeyTwoToneIcon from "@mui/icons-material/VpnKeyTwoTone";
 import { useAuth } from "../hooks/useAuth";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import defaultProfile from "../assets/default_profile_image.webp";
 
 function Header() {
@@ -35,8 +35,12 @@ function Header() {
 
 const LoggedOutHeader = () => {
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleLoginClick = () => {
+    if (location.pathname !== "/login") {
+      localStorage.setItem("previousUrl", location.pathname);
+    }
     navigate("/login");
   };
 

@@ -126,7 +126,9 @@ const SpaceDetailContainer = ({ space }) => {
       headCount: headCount.toString(),
     });
 
-    navigate(`/reservation?${reservationParams.toString()}`);
+    navigate(`/reservation?${reservationParams.toString()}`, {
+      state: { space },
+    });
   };
 
   return (
