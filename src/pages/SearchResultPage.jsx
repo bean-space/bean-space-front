@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { searchSpaces } from "../api/space";
 import Pagination from "@mui/material/Pagination";
 import SpaceCardList from "../components/SpaceCardList";
+import SearchBar from "../components/SearchBar";
 
 const SearchResultPage = () => {
   const location = useLocation();
@@ -45,17 +46,24 @@ const SearchResultPage = () => {
   };
 
   return (
-    <div style={{ margin: "100px 0 0 0" }}>
-      <SpaceCardList spaces={spaces} />
-      <div
-        style={{ marginTop: "20px", display: "flex", justifyContent: "center" }}
-      >
-        <Pagination
-          count={totalPages}
-          page={currentPage}
-          onChange={handlePageChange}
-          color="primary"
-        />
+    <div style={{ marginTop: "100px" }}>
+      <SearchBar />
+      <div style={{ marginTop: "1%" }}>
+        <SpaceCardList spaces={spaces} />
+        <div
+          style={{
+            marginTop: "20px",
+            display: "flex",
+            justifyContent: "center",
+          }}
+        >
+          <Pagination
+            count={totalPages}
+            page={currentPage}
+            onChange={handlePageChange}
+            color="primary"
+          />
+        </div>
       </div>
     </div>
   );

@@ -1,4 +1,12 @@
-import { Box, Typography, Divider, Avatar, Rating, Paper } from "@mui/material";
+import {
+  Box,
+  Typography,
+  Divider,
+  Avatar,
+  Rating,
+  Paper,
+  Pagination,
+} from "@mui/material";
 import Carousel from "react-material-ui-carousel";
 
 const Review = ({ review }) => (
@@ -71,7 +79,10 @@ const Review = ({ review }) => (
   </Box>
 );
 
-const ReviewSection = ({ reviews }) => {
+const ReviewSection = ({ reviews, currentPage, totalPages, onPageChange }) => {
+  const handleChange = (event, value) => {
+    onPageChange(value - 1);
+  };
   return (
     <Box mt={4}>
       <Typography
@@ -89,9 +100,32 @@ const ReviewSection = ({ reviews }) => {
         숙소 이용자들이 남긴 리얼 후기
       </Typography>
       <Divider sx={{ my: 3 }} />
-      {reviews.map((review, index) => (
-        <Review key={index} review={review} />
-      ))}
+      {reviews.length > 0 ? (
+        <>
+          {reviews.map((review, index) => (
+            <Review key={index} review={review} />
+          ))}
+          <Box display="flex" justifyContent="center" mt={3}>
+            <Pagination
+              count={totalPages}
+              page={currentPage + 1}
+              onChange={handleChange}
+              color="primary"
+            />
+          </Box>
+        </>
+      ) : (
+        <Box
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          height="100px"
+        >
+          <Typography variant="h7" color="text.secondary">
+            아직 등록된 후기가 없습니다.
+          </Typography>
+        </Box>
+      )}
     </Box>
   );
 };

@@ -1,7 +1,7 @@
-import { authClient } from "./client";
+import { commonClient } from "./client";
 
 export const getPresignedUrl = async (request) => {
-  const { data } = await authClient.post(
+  const { data } = await commonClient.post(
     "api/v1/images/presigned-url",
     request
   );

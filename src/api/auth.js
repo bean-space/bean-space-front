@@ -1,8 +1,8 @@
-import { authClient } from "./client";
+import { commonClient } from "./client";
 
 export const loginUser = async (login) => {
   try {
-    const { data } = await authClient.post("/api/v1/auth/login", login);
+    const { data } = await commonClient.post("/api/v1/auth/login", login);
     const { accessToken } = data;
     localStorage.setItem("token", accessToken);
     return { success: true };
@@ -22,7 +22,7 @@ export const logoutUser = () => {
 
 export const getUserInfo = async () => {
   try {
-    const { data } = await authClient.get("/api/v1/members/profile");
+    const { data } = await commonClient.get("/api/v1/members/profile");
     const { nickname, profileImageUrl, role } = data;
     return { success: true, nickname, profileImageUrl, role };
   } catch (error) {
@@ -32,7 +32,7 @@ export const getUserInfo = async () => {
 
 export const socialLogin = async (code) => {
   try {
-    const { data } = await authClient.get(
+    const { data } = await commonClient.get(
       `/oauth2/login/callback?code=${code}`
     );
     const { accessToken } = data;
@@ -44,7 +44,7 @@ export const socialLogin = async (code) => {
 };
 
 export const signupUser = async (member) => {
-  const response = await authClient.post("api/v1/auth/sign-up", member);
+  const response = await commonClient.post("api/v1/auth/sign-up", member);
 
   return response;
 };

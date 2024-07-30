@@ -136,7 +136,7 @@ const ReservationPage = () => {
       await reserveSpace({ reservationInfo, id });
 
       alert("예약에 성공했습니다!!");
-      navigate("/myReservation");
+      navigate("/my-reservation");
     } catch (error) {
       if (error.response.data.msg) {
         alert(error.response.data.msg);
@@ -207,8 +207,22 @@ const ReservationPage = () => {
             <Typography variant="h5" gutterBottom>
               예약할 숙소
             </Typography>
-            <Typography variant="h6">{space.space.listingName}</Typography>
-            <Carousel>
+            <Typography variant="h6" sx={{ mb: 2 }}>
+              {space.space.listingName}
+            </Typography>
+            <Carousel
+              indicators={true}
+              navButtonsAlwaysVisible={true}
+              animation="slide"
+              indicatorContainerProps={{
+                style: {
+                  position: "absolute",
+                  bottom: "20px",
+                  zIndex: 1,
+                  marginTop: 0,
+                },
+              }}
+            >
               {space.space.imageUrlList &&
               space.space.imageUrlList.length > 0 &&
               space.space.imageUrlList[0] !== "" ? (

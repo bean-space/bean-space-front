@@ -1,7 +1,7 @@
-import { authClient } from "./client";
+import { commonClient } from "./client";
 
 export const searchSpaces = async (queryParams) => {
-  const { data } = await authClient.get("/api/v1/spaces", {
+  const { data } = await commonClient.get("/api/v1/spaces", {
     params: queryParams,
   });
 
@@ -9,7 +9,15 @@ export const searchSpaces = async (queryParams) => {
 };
 
 export const getSpaceItem = async (id) => {
-  const { data } = await authClient.get(`/api/v1/spaces/${id}`);
+  const { data } = await commonClient.get(`/api/v1/spaces/${id}`);
+
+  return data;
+};
+
+export const getSpaceReview = async ({ id, ...queryParams }) => {
+  const { data } = await commonClient.get(`/api/v1/spaces/${id}/reviews`, {
+    params: queryParams,
+  });
 
   return data;
 };
