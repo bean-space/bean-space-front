@@ -1,9 +1,11 @@
-import MainCard from "../components/MainCards";
+import CouponBanner from "../components/CouponBanner";
+import SearchBar from "../components/SearchBar";
 
 const MainPage = () => {
   return (
     <div style={{ margin: "100px 0 0 0" }}>
-      <MainCard />
+      <CouponBanner />
+      <SearchBar />
     </div>
   );
 };

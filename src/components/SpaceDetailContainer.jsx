@@ -30,7 +30,13 @@ import PeopleCountDropdownForSpaceDetail from "./PeopleCountDropdownForSpaceDeta
 import { useSearch } from "../hooks/useSearch";
 import { useAuth } from "../hooks/useAuth";
 
-const SpaceDetailContainer = ({ space }) => {
+const SpaceDetailContainer = ({
+  space,
+  reviews,
+  currentPage,
+  totalPages,
+  onPageChange,
+}) => {
   const location = useLocation();
   const navigate = useNavigate();
   const { searchState, setSearchState } = useSearch();
@@ -137,7 +143,19 @@ const SpaceDetailContainer = ({ space }) => {
         <Grid container spacing={3}>
           {/* 왼쪽 */}
           <Grid item xs={12} md={8}>
-            <Carousel>
+            <Carousel
+              indicators={true}
+              navButtonsAlwaysVisible={true}
+              animation="slide"
+              indicatorContainerProps={{
+                style: {
+                  position: "absolute",
+                  bottom: "20px",
+                  zIndex: 1,
+                  marginTop: 0,
+                },
+              }}
+            >
               {space.space.imageUrlList &&
               space.space.imageUrlList.length > 0 &&
               space.space.imageUrlList[0] != "" ? (
@@ -151,6 +169,7 @@ const SpaceDetailContainer = ({ space }) => {
                       alignItems: "center",
                       justifyContent: "center",
                       mb: 3,
+                      position: "relative",
                     }}
                   >
                     <div
@@ -174,6 +193,7 @@ const SpaceDetailContainer = ({ space }) => {
                     alignItems: "center",
                     justifyContent: "center",
                     mb: 3,
+                    position: "relative",
                   }}
                 >
                   <div
@@ -189,7 +209,7 @@ const SpaceDetailContainer = ({ space }) => {
                 </Paper>
               )}
             </Carousel>
-            <Typography variant="h4" gutterBottom>
+            <Typography variant="h4" gutterBottom sx={{ mt: 2 }}>
               {space.space.listingName}
             </Typography>
             <Typography variant="subtitle1" gutterBottom>
@@ -200,9 +220,18 @@ const SpaceDetailContainer = ({ space }) => {
 
             <Box display="flex" alignItems="center" mb={3}>
               <IconButton>
-                <Avatar alt="image" src={defaultProfile} />
+                <Avatar
+                  alt="defaul image"
+                  src={space.host.profileImageUrl || defaultProfile}
+                />
               </IconButton>
-              <Typography variant="h6">호스트 아무개님의 숙소</Typography>
+              <Typography variant="h6">
+                호스트
+                <span style={{ fontWeight: "bolder" }}>
+                  &nbsp;{space.host.nickname}
+                </span>
+                님의 숙소
+              </Typography>
             </Box>
             <Divider sx={{ my: 3 }} />
             <List>
@@ -233,7 +262,12 @@ const SpaceDetailContainer = ({ space }) => {
             </Typography>
             <Divider sx={{ my: 3 }} />
 
-            <ReviewSection reviews={space.reviewList} />
+            <ReviewSection
+              reviews={reviews}
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={onPageChange}
+            />
           </Grid>
 
           {/* 오른쪽 */}

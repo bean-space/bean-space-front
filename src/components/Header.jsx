@@ -93,6 +93,7 @@ const LoggedOutHeader = () => {
 const MemberHeader = () => {
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const { logout, profileImageUrl, nickname } = useAuth();
+  const navigate = useNavigate();
 
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
@@ -107,7 +108,36 @@ const MemberHeader = () => {
     handleCloseUserMenu();
   };
 
-  const memberSettings = ["내 예약", "내 프로필", "로그아웃"];
+  const handleSettingClick = (setting) => {
+    handleCloseUserMenu();
+    switch (setting) {
+      case "내 예약":
+        navigate("/my-reservation");
+        break;
+      case "내 프로필":
+        navigate("/my-profile");
+        break;
+      case "내가 찜한 공간":
+        navigate("/wishlist");
+        break;
+      case "내 쿠폰":
+        navigate("/my-coupon");
+        break;
+      case "로그아웃":
+        handleLogout();
+        break;
+      default:
+        break;
+    }
+  };
+
+  const memberSettings = [
+    "내 예약",
+    "내 프로필",
+    "내가 찜한 공간",
+    "내 쿠폰",
+    "로그아웃",
+  ];
 
   return (
     <AppBar position="fixed" sx={{ backgroundColor: "#F7EFDC" }}>
@@ -159,9 +189,7 @@ const MemberHeader = () => {
             {memberSettings.map((setting) => (
               <MenuItem
                 key={setting}
-                onClick={
-                  setting === "로그아웃" ? handleLogout : handleCloseUserMenu
-                }
+                onClick={() => handleSettingClick(setting)}
               >
                 <Typography textAlign="center">{setting}</Typography>
               </MenuItem>
@@ -176,6 +204,8 @@ const MemberHeader = () => {
 const HostHeader = () => {
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const { logout, profileImageUrl, nickname } = useAuth();
+  const location = useLocation();
+  const navigate = useNavigate();
 
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
@@ -190,8 +220,41 @@ const HostHeader = () => {
     handleCloseUserMenu();
   };
 
-  const hostPages = ["예약", "공간", "통계"];
-  const hostSettings = ["내 예약", "내 프로필", "로그아웃"];
+  const handleSettingClick = (setting) => {
+    handleCloseUserMenu();
+    switch (setting) {
+      case "내 예약":
+        navigate("/my-reservation");
+        break;
+      case "내 프로필":
+        navigate("/my-profile");
+        break;
+      case "내가 찜한 공간":
+        navigate("/wishlist");
+        break;
+      case "내 쿠폰":
+        navigate("/my-coupon");
+        break;
+      case "로그아웃":
+        handleLogout();
+        break;
+      default:
+        break;
+    }
+  };
+
+  const hostPages = [
+    { name: "예약", path: "/host/reservation" },
+    { name: "공간", path: "/host/space" },
+    { name: "통계", path: "/host/statistics" },
+  ];
+  const hostSettings = [
+    "내 예약",
+    "내 프로필",
+    "내가 찜한 공간",
+    "내 쿠폰",
+    "로그아웃",
+  ];
 
   return (
     <AppBar position="fixed" sx={{ backgroundColor: "#F7EFDC" }}>
@@ -222,16 +285,26 @@ const HostHeader = () => {
           <Box sx={{ flexGrow: 1, display: "flex", flexDirection: "row" }}>
             {hostPages.map((page) => (
               <Button
-                key={page}
+                key={page.name}
+                component={Link}
+                to={page.path}
                 sx={{
-                  my: 2,
+                  my: 1,
+                  textAlign: "center",
                   color: "black",
                   display: "block",
                   mx: 2,
-                  fontSize: "1.10rem",
+                  fontSize: "1rem",
+                  borderBottom:
+                    location.pathname === page.path
+                      ? "2px solid black"
+                      : "none",
+                  "&:hover": {
+                    backgroundColor: "rgba(0, 0, 0, 0.04)",
+                  },
                 }}
               >
-                {page}
+                {page.name}
               </Button>
             ))}
           </Box>
@@ -264,9 +337,7 @@ const HostHeader = () => {
               {hostSettings.map((setting) => (
                 <MenuItem
                   key={setting}
-                  onClick={
-                    setting === "로그아웃" ? handleLogout : handleCloseUserMenu
-                  }
+                  onClick={() => handleSettingClick(setting)}
                 >
                   <Typography textAlign="center">{setting}</Typography>
                 </MenuItem>
@@ -282,6 +353,8 @@ const HostHeader = () => {
 const AdminHeader = () => {
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const { logout, profileImageUrl, nickname } = useAuth();
+  const location = useLocation();
+  const navigate = useNavigate();
 
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
@@ -296,7 +369,25 @@ const AdminHeader = () => {
     handleCloseUserMenu();
   };
 
-  const adminPages = ["공간", "쿠폰"];
+  const handleSettingClick = (setting) => {
+    handleCloseUserMenu();
+    switch (setting) {
+      case "내 프로필":
+        navigate("/my-profile");
+        break;
+      case "로그아웃":
+        handleLogout();
+        break;
+      default:
+        break;
+    }
+  };
+
+  const adminPages = [
+    { name: "공간", path: "/admin/space" },
+    { name: "쿠폰", path: "/admin/coupon" },
+  ];
+
   const adminSettings = ["내 프로필", "로그아웃"];
 
   return (
@@ -328,16 +419,26 @@ const AdminHeader = () => {
           <Box sx={{ flexGrow: 1, display: "flex", flexDirection: "row" }}>
             {adminPages.map((page) => (
               <Button
-                key={page}
+                key={page.name}
+                component={Link}
+                to={page.path}
                 sx={{
-                  my: 2,
+                  my: 1,
+                  textAlign: "center",
                   color: "black",
                   display: "block",
                   mx: 2,
-                  fontSize: "1.10rem",
+                  fontSize: "1rem",
+                  borderBottom:
+                    location.pathname === page.path
+                      ? "2px solid black"
+                      : "none",
+                  "&:hover": {
+                    backgroundColor: "rgba(0, 0, 0, 0.04)",
+                  },
                 }}
               >
-                {page}
+                {page.name}
               </Button>
             ))}
           </Box>
@@ -370,9 +471,7 @@ const AdminHeader = () => {
               {adminSettings.map((setting) => (
                 <MenuItem
                   key={setting}
-                  onClick={
-                    setting === "로그아웃" ? handleLogout : handleCloseUserMenu
-                  }
+                  onClick={() => handleSettingClick(setting)}
                 >
                   <Typography textAlign="center">{setting}</Typography>
                 </MenuItem>
