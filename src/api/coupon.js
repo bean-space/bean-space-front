@@ -8,10 +8,12 @@ export const getCouponListFromMember = async () => {
 
 export const getCouponList = async () => {
   const { data } = await commonClient.get("/api/v1/coupons");
+
   return data;
 };
 
 export const issueCoupon = async (id) => {
   const { data } = await commonClient.post(`/api/v1/coupons/${id}`);
+
   return data;
 };

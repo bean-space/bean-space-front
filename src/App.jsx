@@ -20,6 +20,7 @@ import MyProfilePage from "./pages/MyProfilePage";
 import MyCouponPage from "./pages/MyCouponPage";
 import MyWishListPage from "./pages/MyWishListPage";
 import HostSpaceEditPage from "./pages/HostSpaceEditPage";
+import CouponPage from "./pages/CouponPage";
 
 const App = () => {
   return (
@@ -34,6 +35,7 @@ const App = () => {
               <Route path="/space/search" element={<SearchResultPage />} />
               <Route path="/login" element={<LoginPage />} />
               <Route path="/signup" element={<SignupPage />} />
+              <Route path="/coupon" element={<CouponPage />} />
               <Route path="/space/:spaceId" element={<SpaceDetailPage />} />
               <Route path="/reservation" element={<ReservationPage />} />
               <Route path="/my-reservation" element={<MyReservationPage />} />
