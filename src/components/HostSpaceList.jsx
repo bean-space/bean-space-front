@@ -69,7 +69,7 @@ const HostSpaceList = ({ spaces, onEdit, onDelete }) => {
   if (!spaces || spaces.length === 0) {
     return (
       <Box textAlign="center" py={3}>
-        <Typography variant="h6">등록된 공간이 없습니다.</Typography>
+        <Typography variant="h6">등록된 공간이 없습니다</Typography>
       </Box>
     );
   }
@@ -267,20 +267,24 @@ const HostSpaceList = ({ spaces, onEdit, onDelete }) => {
                     mt: 2,
                   }}
                 >
-                  <Button
-                    variant="outlined"
-                    startIcon={<EditIcon />}
-                    onClick={() => onEdit(space.id)}
-                    size="small"
-                  >
-                    수정
-                  </Button>
+                  {space.status !== "REJECTED" && (
+                    <Button
+                      variant="outlined"
+                      startIcon={<EditIcon />}
+                      onClick={() => onEdit(space.id)}
+                      size="small"
+                      sx={{ color: "#2AAADE" }}
+                    >
+                      수정
+                    </Button>
+                  )}
                   <Button
                     variant="outlined"
                     color="error"
                     startIcon={<DeleteIcon />}
                     onClick={() => onDelete(space.id)}
                     size="small"
+                    sx={{ color: "#F17D7B" }}
                   >
                     삭제
                   </Button>

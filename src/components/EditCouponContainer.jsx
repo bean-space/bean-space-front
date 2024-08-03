@@ -1,31 +1,38 @@
-import { useState } from "react";
+import { useEffect, useMemo } from "react";
+import { useNavigate } from "react-router-dom";
+import { updateCoupon } from "../api/admin";
+import dayjs from "dayjs";
 import {
-  TextField,
-  Button,
   Box,
-  Typography,
+  Button,
   Container,
   Grid,
   InputAdornment,
   Paper,
+  TextField,
+  Typography,
 } from "@mui/material";
-import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
-import dayjs from "dayjs";
-import "dayjs/locale/ko";
-import { createCoupon } from "../api/admin";
-import { useNavigate } from "react-router-dom";
+import { DateTimePicker } from "@mui/x-date-pickers";
 
-const CreateCouponContainer = () => {
-  const [coupon, setCoupon] = useState({
-    name: "",
-    discountRate: "",
-    maxDiscount: "",
-    issueStartAt: null,
-    issueEndAt: null,
-    expirationAt: null,
-    totalQuantity: "",
-  });
+const EditCouponContainer = ({ coupon, setCoupon }) => {
   const navigate = useNavigate();
+
+  const formattedCoupon = useMemo(() => {
+    if (!coupon) return null;
+    return {
+      ...coupon,
+      issueStartAt: coupon.issueStartAt ? dayjs(coupon.issueStartAt) : null,
+      issueEndAt: coupon.issueEndAt ? dayjs(coupon.issueEndAt) : null,
+      expirationAt: coupon.expirationAt ? dayjs(coupon.expirationAt) : null,
+      maxDiscount: coupon.maxDiscount.toLocaleString(),
+    };
+  }, [coupon]);
+
+  useEffect(() => {
+    if (formattedCoupon) {
+      setCoupon(formattedCoupon);
+    }
+  }, [formattedCoupon, setCoupon]);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -76,7 +83,7 @@ const CreateCouponContainer = () => {
 
     for (const key in coupon) {
       if (coupon[key] === null || coupon[key] === "") {
-        alert("모든 필드를 채워주세요");
+        alert("모든 필드를 채워주세요.");
         return null;
       }
     }
@@ -86,7 +93,7 @@ const CreateCouponContainer = () => {
       return null;
     }
     if (parseInt(coupon.totalQuantity) === 0) {
-      alert("쿠폰 수량은 0보다 커야 합니다");
+      alert("쿠폰 수량은 0보다 커야 합니다.");
       return null;
     }
 
@@ -104,19 +111,22 @@ const CreateCouponContainer = () => {
         expirationAt: dayjs(coupon.expirationAt).format("YYYY-MM-DDTHH:mm:ss"),
       };
       try {
-        await createCoupon(couponData);
-
-        alert("쿠폰이 성공적으로 생성되었습니다");
+        await updateCoupon({ coupon: couponData, id: couponData.id });
+        alert("쿠폰이 성공적으로 수정되었습니다");
         navigate(-1);
       } catch (error) {
         if (error.response.data.msg) {
           alert(error.response.data.msg);
         } else {
-          alert("쿠폰 생성에 실패하였습니다");
+          alert("쿠폰 수정에 실패하였습니다");
         }
       }
     }
   };
+
+  if (!formattedCoupon) {
+    return <div>로딩 중...</div>;
+  }
 
   return (
     <Container maxWidth="lg">
@@ -127,7 +137,7 @@ const CreateCouponContainer = () => {
           sx={{ margin: "auto", mt: 1 }}
         >
           <Typography variant="h4" gutterBottom>
-            쿠폰 생성하기
+            쿠폰 수정하기
           </Typography>
 
           <Grid container spacing={2}>
@@ -193,7 +203,7 @@ const CreateCouponContainer = () => {
                 발행 시작 시간
               </Typography>
               <DateTimePicker
-                value={coupon.issueStartAt}
+                value={formattedCoupon.issueStartAt}
                 onChange={handleDateTimeChange("issueStartAt")}
                 views={["year", "month", "day", "hours"]}
                 format="YYYY년 MM월 DD일 HH시"
@@ -206,7 +216,7 @@ const CreateCouponContainer = () => {
                 발행 종료 시간
               </Typography>
               <DateTimePicker
-                value={coupon.issueEndAt}
+                value={formattedCoupon.issueEndAt}
                 onChange={handleDateTimeChange("issueEndAt")}
                 views={["year", "month", "day", "hours"]}
                 format="YYYY년 MM월 DD일 HH시"
@@ -219,7 +229,7 @@ const CreateCouponContainer = () => {
                 만료 시간
               </Typography>
               <DateTimePicker
-                value={coupon.expirationAt}
+                value={formattedCoupon.expirationAt}
                 onChange={handleDateTimeChange("expirationAt")}
                 views={["year", "month", "day", "hours"]}
                 format="YYYY년 MM월 DD일 HH시"
@@ -245,7 +255,7 @@ const CreateCouponContainer = () => {
                 fontSize: "1rem",
                 border: `1px solid`,
                 "&:hover": {
-                  backgroundColor: "rgba(241, 125, 123, 0.04)",
+                  backgroundColor: "#f17d7b",
                   border: `1px solid #E25350`,
                   color: "#E25350",
                 },
@@ -270,7 +280,7 @@ const CreateCouponContainer = () => {
                 "&:hover": { backgroundColor: "#2AAADE" },
               }}
             >
-              쿠폰 생성
+              쿠폰 수정
             </Button>
           </Box>
         </Box>
@@ -279,4 +289,4 @@ const CreateCouponContainer = () => {
   );
 };
 
-export default CreateCouponContainer;
+export default EditCouponContainer;

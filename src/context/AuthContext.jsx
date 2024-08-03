@@ -8,6 +8,7 @@ export const AuthProvider = ({ children }) => {
     isLoggedIn: false,
     token: null,
     nickname: null,
+    email: null,
     profileImageUrl: null,
     role: null,
   });
@@ -21,6 +22,7 @@ export const AuthProvider = ({ children }) => {
           isLoggedIn: true,
           token,
           nickname: userdata.nickname,
+          email: userdata.email,
           profileImageUrl: userdata.profileImageUrl,
           role: userdata.role,
         });
@@ -30,6 +32,7 @@ export const AuthProvider = ({ children }) => {
           isLoggedIn: false,
           token: null,
           nickname: null,
+          email: null,
           profileImageUrl: null,
           role: null,
         });
@@ -55,6 +58,7 @@ export const AuthProvider = ({ children }) => {
       isLoggedIn: false,
       token: null,
       nickname: null,
+      email: null,
       profileImageUrl: null,
       role: null,
     });
