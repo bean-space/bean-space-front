@@ -20,7 +20,6 @@ const HostSpaceEditPage = () => {
           const data = await getSpaceItem(id);
           setSpaceData(data);
         } catch (error) {
-          console.error("Failed to fetch space data:", error);
           alert("공간 정보를 불러오는데 실패했습니다.");
           navigate("/host/space");
         }

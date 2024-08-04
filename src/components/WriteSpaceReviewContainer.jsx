@@ -129,7 +129,7 @@ const WriteSpaceReviewContainer = ({
                 "&:hover": { backgroundColor: "#2AAADE" },
               }}
             >
-              리뷰 제출
+              리뷰 등록하기
             </Button>
           </Box>
         </form>
