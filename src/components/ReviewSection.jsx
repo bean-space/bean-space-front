@@ -8,11 +8,15 @@ import {
   Pagination,
 } from "@mui/material";
 import Carousel from "react-material-ui-carousel";
+import defaultProfile from "../assets/default_profile_image.webp";
 
 const Review = ({ review }) => (
   <Box mb={3}>
     <Box display="flex" alignItems="center" mb={1}>
-      <Avatar src={review.reviewerProfileUrl} alt={review.reviewerName} />
+      <Avatar
+        src={review.reviewerProfileUrl || defaultProfile}
+        alt={review.reviewerName}
+      />
       <Box ml={2}>
         <Typography variant="subtitle1">{review.reviewerName}</Typography>
         <Typography variant="body2" color="text.secondary">

@@ -72,9 +72,14 @@ export const AuthProvider = ({ children }) => {
     return result.success;
   };
 
+  const updateAuthState = async (newToken) => {
+    localStorage.setItem("token", newToken);
+    await fetchUserInfo();
+  };
+
   return (
     <AuthContext.Provider
-      value={{ ...authState, login, logout, kakaoSocialLogin }}
+      value={{ ...authState, login, logout, kakaoSocialLogin, updateAuthState }}
     >
       {children}
     </AuthContext.Provider>

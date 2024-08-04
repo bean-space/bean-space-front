@@ -23,3 +23,9 @@ export const deleteSpace = async (id) => {
 
   return data;
 };
+
+export const updateRoleToHost = async () => {
+  const { data } = await commonClient.patch("/api/v1/members/request-host");
+
+  return data;
+};

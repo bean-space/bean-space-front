@@ -19,6 +19,7 @@ import {
   KingBed as KingBedIcon,
   Bathtub as BathtubIcon,
   MeetingRoom as MeetingRoomIcon,
+  Star as StarIcon,
 } from "@mui/icons-material";
 import { useLocation, useNavigate } from "react-router-dom";
 import defaultProfile from "../assets/default_profile_image.webp";
@@ -209,12 +210,56 @@ const SpaceDetailContainer = ({
                 </Paper>
               )}
             </Carousel>
-            <Typography variant="h4" gutterBottom sx={{ mt: 2 }}>
-              {space.space.listingName}
-            </Typography>
-            <Typography variant="subtitle1" gutterBottom>
-              {space.space.sido}
-            </Typography>
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                mt: 2,
+              }}
+            >
+              <Box>
+                <Typography variant="h4" gutterBottom>
+                  {space.space.listingName}
+                </Typography>
+                <Typography variant="subtitle1" gutterBottom>
+                  {space.space.sido}
+                </Typography>
+              </Box>
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  backgroundColor: "#87CEEB",
+                  borderRadius: "20px",
+                  padding: "8px 16px",
+                  boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
+                }}
+              >
+                <Typography
+                  variant="subtitle1"
+                  sx={{
+                    fontWeight: "bold",
+                    color: "#4a4a4a",
+                    marginRight: "8px",
+                  }}
+                >
+                  평균 별점 :
+                </Typography>
+                <StarIcon sx={{ color: "#FFD700", mr: 0.5 }} />
+                <Typography
+                  variant="h6"
+                  sx={{
+                    fontWeight: "bold",
+                    color: "white",
+                  }}
+                >
+                  {space.averageRating
+                    ? space.averageRating.toFixed(1)
+                    : "아직 리뷰 없음"}
+                </Typography>
+              </Box>
+            </Box>
 
             <Divider sx={{ my: 3 }} />
 

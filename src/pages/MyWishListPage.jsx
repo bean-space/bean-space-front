@@ -9,7 +9,7 @@ const MyWishListPage = () => {
 
   useEffect(() => {
     alert("아직 제공하지 않는 기능입니다!");
-    navigate("/");
+    navigate(-1);
 
     if (role == "ADMIN") {
       alert("관리자는 공간 찜하기를 할 수 없습니다.");

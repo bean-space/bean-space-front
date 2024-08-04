@@ -1,9 +1,9 @@
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
 import { useEffect, useState } from "react";
-import HostStatisticsContainer from "../components/HostStatisticsContainer";
+import ApplyToHostContainer from "../components/ApplyToHostContainer";
 
-const HostStatisticsPage = () => {
+const ApplyToHostPage = () => {
   const { role, isLoggedIn } = useAuth();
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
@@ -18,24 +18,21 @@ const HostStatisticsPage = () => {
   }, []);
 
   useEffect(() => {
-    alert("아직 제공하지 않는 기능입니다!");
-    navigate(-1);
-
-    // if (!isLoading && (!isLoggedIn || role !== "HOST")) {
-    //   alert("호스트만 접근할 수 있는 페이지입니다.");
-    //   navigate("/");
-    // }
+    if (!isLoading && (!isLoggedIn || role !== "MEMBER")) {
+      alert("일반 유저만 접근할 수 있는 페이지입니다.");
+      navigate("/");
+    }
   }, [isLoading, isLoggedIn, role, navigate]);
 
-  if (!isLoggedIn || role !== "HOST" || isLoading) {
+  if (!isLoggedIn || role !== "MEMBER" || isLoading) {
     return <div>로딩 중...</div>;
   }
 
   return (
     <div style={{ flex: 1, margin: "100px 0 0 0" }}>
-      <HostStatisticsContainer />
+      <ApplyToHostContainer />
     </div>
   );
 };
 
-export default HostStatisticsPage;
+export default ApplyToHostPage;

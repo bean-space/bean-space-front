@@ -1,5 +1,21 @@
+import { useState, useEffect } from "react";
+import MyCouponList from "./MyCouponList";
+import { getCouponListFromMember } from "../api/coupon";
+
 const MyCouponContainer = () => {
-  return <div>내 쿠폰 확인 페이지 입니다</div>;
+  const [coupons, setCoupons] = useState([]);
+
+  const fetchCouponList = async () => {
+    const data = await getCouponListFromMember();
+
+    setCoupons(data);
+  };
+
+  useEffect(() => {
+    fetchCouponList();
+  }, []);
+
+  return <MyCouponList coupons={coupons} />;
 };
 
 export default MyCouponContainer;

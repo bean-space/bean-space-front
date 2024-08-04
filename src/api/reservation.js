@@ -8,3 +8,9 @@ export const reserveSpace = async ({ reservationInfo, id }) => {
 
   return response;
 };
+
+export const getMemberReservationList = async () => {
+  const { data } = await commonClient.get("api/v1/members/reservations");
+
+  return data;
+};

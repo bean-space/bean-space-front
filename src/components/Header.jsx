@@ -123,6 +123,9 @@ const MemberHeader = () => {
       case "내 쿠폰":
         navigate("/my-coupon");
         break;
+      case "호스트로 전환하기":
+        navigate("/apply-to-host");
+        break;
       case "로그아웃":
         handleLogout();
         break;
@@ -136,6 +139,7 @@ const MemberHeader = () => {
     "내 프로필",
     "내가 찜한 공간",
     "내 쿠폰",
+    "호스트로 전환하기",
     "로그아웃",
   ];
 
