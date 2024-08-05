@@ -159,89 +159,100 @@ const AdminCouponContainer = ({ coupons, setCoupons }) => {
         </Button>
       </Box>
       <Box mt={3}>
-        <Grid container spacing={2}>
-          {filteredCoupons.map((coupon) => (
-            <Grid item xs={12} sm={6} md={3} key={coupon.id}>
-              <Card sx={{ padding: 0.5 }}>
-                <CardContent>
-                  <Typography variant="h6" sx={{ ml: 0.5 }} gutterBottom>
-                    {coupon.name}
-                  </Typography>
-                  <Grid container spacing={0.5}>
-                    <Grid item xs={5}>
-                      <Typography variant="body2">
-                        할인율(%): {coupon.discountRate}%
-                      </Typography>
-                    </Grid>
-                    <Grid item xs={7}>
-                      <Typography variant="body2">
-                        최대 할인 금액: {coupon.maxDiscount}원
-                      </Typography>
-                    </Grid>
-                    <Grid item xs={5}>
-                      <Typography variant="body2">
-                        총 수량: {coupon.totalQuantity}
-                      </Typography>
-                    </Grid>
-                    <Grid item xs={7}>
-                      <Typography variant="body2">
-                        남은 수량: {coupon.stock}
-                      </Typography>
-                    </Grid>
-                  </Grid>
-                  <Box mt={2}>
-                    <Typography variant="body2">
-                      발행 시작 시간: {formatDateTime(coupon.issueStartAt)}
+        {filteredCoupons.length > 0 ? (
+          <Grid container spacing={2}>
+            {filteredCoupons.map((coupon) => (
+              <Grid item xs={12} sm={6} md={3} key={coupon.id}>
+                <Card sx={{ padding: 0.5 }}>
+                  <CardContent>
+                    <Typography variant="h6" sx={{ ml: 0.5 }} gutterBottom>
+                      {coupon.name}
                     </Typography>
-                    <Typography variant="body2">
-                      발행 종료 시간: {formatDateTime(coupon.issueEndAt)}
-                    </Typography>
-                    <Typography variant="body2">
-                      쿠폰 만료 시간: {formatDateTime(coupon.expirationAt)}
-                    </Typography>
-                  </Box>
-                  {tabValue === 0 && (
-                    <Box mt={3} display="flex" justifyContent="flex-end">
-                      <Button
-                        sx={{
-                          color: "#2AAADE",
-                          border: `1px solid`,
-                          "&.MuiButton-containedError": {
-                            border: `1px solid`,
-                          },
-                          mr: 1,
-                        }}
-                        size="small"
-                        variant="outlined"
-                        startIcon={<EditIcon />}
-                        onClick={() => handleEdit(coupon)}
-                      >
-                        수정
-                      </Button>
-                      <Button
-                        variant="outlined"
-                        sx={{
-                          mr: 1,
-                          border: `1px solid`,
-                          "&.MuiButton-containedError": {
-                            border: `1px solid`,
-                          },
-                          color: "#F17D7B",
-                        }}
-                        size="small"
-                        startIcon={<DeleteIcon />}
-                        onClick={() => handleDeleteClick(coupon)}
-                        color="error"
-                      >
-                        삭제
-                      </Button>
+                    <Grid container spacing={0.5}>
+                      <Grid item xs={5}>
+                        <Typography variant="body2">
+                          할인율(%): {coupon.discountRate}%
+                        </Typography>
+                      </Grid>
+                      <Grid item xs={7}>
+                        <Typography variant="body2">
+                          최대 할인 금액: {coupon.maxDiscount}원
+                        </Typography>
+                      </Grid>
+                      <Grid item xs={5}>
+                        <Typography variant="body2">
+                          총 수량: {coupon.totalQuantity}
+                        </Typography>
+                      </Grid>
+                      <Grid item xs={7}>
+                        <Typography variant="body2">
+                          남은 수량: {coupon.stock}
+                        </Typography>
+                      </Grid>
+                    </Grid>
+                    <Box mt={2}>
+                      <Typography variant="body2">
+                        발행 시작 시간: {formatDateTime(coupon.issueStartAt)}
+                      </Typography>
+                      <Typography variant="body2">
+                        발행 종료 시간: {formatDateTime(coupon.issueEndAt)}
+                      </Typography>
+                      <Typography variant="body2">
+                        쿠폰 만료 시간: {formatDateTime(coupon.expirationAt)}
+                      </Typography>
                     </Box>
-                  )}
-                </CardContent>
-              </Card>
-            </Grid>
-          ))}
-        </Grid>
+                    {tabValue === 0 && (
+                      <Box mt={3} display="flex" justifyContent="flex-end">
+                        <Button
+                          sx={{
+                            color: "#2AAADE",
+                            border: `1px solid`,
+                            "&.MuiButton-containedError": {
+                              border: `1px solid`,
+                            },
+                            mr: 1,
+                          }}
+                          size="small"
+                          variant="outlined"
+                          startIcon={<EditIcon />}
+                          onClick={() => handleEdit(coupon)}
+                        >
+                          수정
+                        </Button>
+                        <Button
+                          variant="outlined"
+                          sx={{
+                            mr: 1,
+                            border: `1px solid`,
+                            "&.MuiButton-containedError": {
+                              border: `1px solid`,
+                            },
+                            color: "#F17D7B",
+                          }}
+                          size="small"
+                          startIcon={<DeleteIcon />}
+                          onClick={() => handleDeleteClick(coupon)}
+                          color="error"
+                        >
+                          삭제
+                        </Button>
+                      </Box>
+                    )}
+                  </CardContent>
+                </Card>
+              </Grid>
+            ))}
+          </Grid>
+        ) : (
+          <Typography
+            variant="h6"
+            align="center"
+            color="textSecondary"
+            sx={{ mt: 8 }}
+          >
+            표시할 쿠폰이 없습니다.
+          </Typography>
+        )}
       </Box>
       <Dialog
         open={openDeleteDialog}
