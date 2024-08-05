@@ -24,6 +24,12 @@ export const deleteSpace = async (id) => {
   return data;
 };
 
+export const getHostReservationList = async () => {
+  const { data } = await commonClient.get("/api/v1/host/reservations");
+
+  return data;
+};
+
 export const updateRoleToHost = async () => {
   const { data } = await commonClient.patch("/api/v1/members/request-host");
 
