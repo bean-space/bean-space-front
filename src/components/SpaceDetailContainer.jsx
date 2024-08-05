@@ -302,7 +302,11 @@ const SpaceDetailContainer = ({
 
             <Divider sx={{ my: 3 }} />
 
-            <Typography variant="body1" paragraph>
+            <Typography
+              variant="body1"
+              sx={{ whiteSpace: "pre-wrap" }}
+              paragraph
+            >
               {space.space.content}
             </Typography>
             <Divider sx={{ my: 3 }} />

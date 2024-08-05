@@ -322,7 +322,10 @@ const HostSpaceList = ({ spaces, onEdit, onDelete }) => {
             >
               상세 내용
             </Typography>
-            <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+            <Typography
+              id="modal-modal-description"
+              sx={{ mt: 2, whiteSpace: "pre-wrap" }}
+            >
               {selectedContent}
             </Typography>
           </Box>
