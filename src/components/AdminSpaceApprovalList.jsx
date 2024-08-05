@@ -99,28 +99,33 @@ const AdminSpaceApprovalList = ({ spaces, onApprove, onReject }) => {
             <Card>
               <Box sx={{ height: "200px", overflow: "hidden" }}>
                 <Carousel sx={{ height: "100%" }} autoPlay={false}>
-                  {space.imageUrlList && space.imageUrlList.length > 0 ? (
-                    space.imageUrlList.map((imageUrl, index) => (
-                      <Paper
-                        key={index}
-                        sx={{
-                          height: "200px",
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                        }}
-                      >
-                        <div
-                          style={{
-                            width: "100%",
-                            height: "100%",
-                            backgroundImage: `url(${imageUrl})`,
-                            backgroundPosition: "center",
-                            backgroundSize: "cover",
-                          }}
-                        />
-                      </Paper>
-                    ))
+                  {space.imageUrlList &&
+                  space.imageUrlList.length > 0 &&
+                  space.imageUrlList.some((url) => url.trim() !== "") ? (
+                    space.imageUrlList.map(
+                      (imageUrl, index) =>
+                        imageUrl.trim() !== "" && (
+                          <Paper
+                            key={index}
+                            sx={{
+                              height: "200px",
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "center",
+                            }}
+                          >
+                            <div
+                              style={{
+                                width: "100%",
+                                height: "100%",
+                                backgroundImage: `url(${imageUrl})`,
+                                backgroundPosition: "center",
+                                backgroundSize: "cover",
+                              }}
+                            />
+                          </Paper>
+                        )
+                    )
                   ) : (
                     <Paper
                       sx={{
@@ -331,25 +336,25 @@ const AdminSpaceApprovalList = ({ spaces, onApprove, onReject }) => {
           </Typography>
           <Box sx={{ mt: 2, display: "flex", justifyContent: "flex-end" }}>
             <Button
-              variant="contained"
-              onClick={handleCloseConfirmModal}
-              sx={{
-                mr: 1,
-                backgroundColor: "#F17D7B",
-                "&:hover": { backgroundColor: "#F05552" },
-              }}
-            >
-              취소
-            </Button>
-            <Button
               onClick={handleConfirmAction}
               variant="contained"
               sx={{
+                mr: 1,
                 backgroundColor: "#87CEEB",
                 "&:hover": { backgroundColor: "#2AAADE" },
               }}
             >
               확인
+            </Button>
+            <Button
+              variant="contained"
+              onClick={handleCloseConfirmModal}
+              sx={{
+                backgroundColor: "#F17D7B",
+                "&:hover": { backgroundColor: "#F05552" },
+              }}
+            >
+              취소
             </Button>
           </Box>
         </Box>

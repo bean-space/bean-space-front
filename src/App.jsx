@@ -22,6 +22,7 @@ import MyWishListPage from "./pages/MyWishListPage";
 import HostSpaceEditPage from "./pages/HostSpaceEditPage";
 import CouponPage from "./pages/CouponPage";
 import AdminCouponPage from "./pages/AdminCouponPage";
+import WriteSpaceReviewPage from "./pages/WriteSpaceReviewPage";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
@@ -29,6 +30,8 @@ import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
 import "dayjs/locale/ko";
 import EditCouponPage from "./pages/EditCouponPage";
+import NotFoundPage from "./pages/NotFoundPage";
+import ApplyToHostPage from "./pages/ApplyToHostPage";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -56,9 +59,14 @@ const App = () => {
                 <Route path="/space/:spaceId" element={<SpaceDetailPage />} />
                 <Route path="/reservation" element={<ReservationPage />} />
                 <Route path="/my-reservation" element={<MyReservationPage />} />
+                <Route
+                  path="/my-reservation/write-review/:spaceId/:reservationId"
+                  element={<WriteSpaceReviewPage />}
+                />
                 <Route path="/my-profile" element={<MyProfilePage />} />
                 <Route path="/wishlist" element={<MyWishListPage />} />
                 <Route path="/my-coupon" element={<MyCouponPage />} />
+                <Route path="/apply-to-host" element={<ApplyToHostPage />} />
                 <Route
                   path="/admin/space"
                   element={<AdminSpaceApprovalPage />}
@@ -89,6 +97,7 @@ const App = () => {
                   path="/host/statistics"
                   element={<HostStatisticsPage />}
                 />
+                <Route path="*" element={<NotFoundPage />} />
               </Routes>
             </main>
           </BrowserRouter>

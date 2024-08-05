@@ -21,3 +21,12 @@ export const getSpaceReview = async ({ id, ...queryParams }) => {
 
   return data;
 };
+
+export const addReview = async ({ review, id }) => {
+  const { data } = await commonClient.post(
+    `/api/v1/spaces/${id}/reviews`,
+    review
+  );
+
+  return data;
+};
