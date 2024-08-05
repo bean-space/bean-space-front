@@ -45,8 +45,6 @@ const SearchResultPage = () => {
     }
   };
 
-  if (spaces.length === 0) return null;
-
   return (
     <div style={{ marginTop: "100px" }}>
       <SearchBar />
