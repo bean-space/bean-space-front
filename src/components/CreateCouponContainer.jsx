@@ -98,7 +98,7 @@ const CreateCouponContainer = () => {
       const couponData = {
         ...coupon,
         discountRate: parseInt(coupon.discountRate),
-        maxDiscount: parseInt(coupon.maxDiscount),
+        maxDiscount: parseInt(coupon.maxDiscount.replace(/,/g, "")),
         issueStartAt: dayjs(coupon.issueStartAt).format("YYYY-MM-DDTHH:mm:ss"),
         issueEndAt: dayjs(coupon.issueEndAt).format("YYYY-MM-DDTHH:mm:ss"),
         expirationAt: dayjs(coupon.expirationAt).format("YYYY-MM-DDTHH:mm:ss"),

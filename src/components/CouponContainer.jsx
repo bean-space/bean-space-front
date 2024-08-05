@@ -143,33 +143,44 @@ const CouponContainer = () => {
         >
           쿠폰 이벤트 페이지
         </Typography>
-        <Grid container spacing={3}>
-          {coupons.map((coupon) => (
-            <Grid item xs={12} sm={6} key={coupon.id}>
-              <Card>
-                <CardContent>
-                  <Typography variant="h5" gutterBottom>
-                    {coupon.name}
-                  </Typography>
-                  <Typography variant="body1" color="text.secondary">
-                    할인율: {coupon.discountRate}%
-                  </Typography>
-                  <Typography variant="body1" color="text.secondary">
-                    최대 할인 금액: {coupon.maxDiscount}원
-                  </Typography>
-                  <Typography
-                    variant="body1"
-                    color="text.secondary"
-                    gutterBottom
-                  >
-                    쿠폰 만료 시간: {formatDateTime(coupon.expirationAt)}
-                  </Typography>
-                  <Box mt={2}>{getCouponDetailsBox(coupon)}</Box>
-                </CardContent>
-              </Card>
-            </Grid>
-          ))}
-        </Grid>
+        {coupons.length > 0 ? (
+          <Grid container spacing={3}>
+            {coupons.map((coupon) => (
+              <Grid item xs={12} sm={6} key={coupon.id}>
+                <Card>
+                  <CardContent>
+                    <Typography variant="h5" gutterBottom>
+                      {coupon.name}
+                    </Typography>
+                    <Typography variant="body1" color="text.secondary">
+                      할인율: {coupon.discountRate}%
+                    </Typography>
+                    <Typography variant="body1" color="text.secondary">
+                      최대 할인 금액: {coupon.maxDiscount}원
+                    </Typography>
+                    <Typography
+                      variant="body1"
+                      color="text.secondary"
+                      gutterBottom
+                    >
+                      쿠폰 만료 시간: {formatDateTime(coupon.expirationAt)}
+                    </Typography>
+                    <Box mt={2}>{getCouponDetailsBox(coupon)}</Box>
+                  </CardContent>
+                </Card>
+              </Grid>
+            ))}
+          </Grid>
+        ) : (
+          <Typography
+            variant="h6"
+            align="center"
+            color="textSecondary"
+            sx={{ mt: 4 }}
+          >
+            표시할 쿠폰이 없습니다.
+          </Typography>
+        )}
       </Box>
     </Container>
   );
