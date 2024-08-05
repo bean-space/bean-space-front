@@ -303,7 +303,9 @@ const AdminSpaceApprovalList = ({ spaces, onApprove, onReject }) => {
               <Typography variant="body1" sx={{ mt: 2 }}>
                 숙소 설명:
               </Typography>
-              <Typography variant="body2">{selectedSpace.content}</Typography>
+              <Typography variant="body2" sx={{ whiteSpace: "pre-wrap" }}>
+                {selectedSpace.content}
+              </Typography>
             </>
           )}
         </Box>
