@@ -83,7 +83,18 @@ const HostReservationContainer = () => {
       <Typography variant="h4" sx={{ marginY: 3 }}>
         호스트 예약 조회 페이지
       </Typography>
-      <Tabs value={tabValue} onChange={handleTabChange}>
+      <Tabs
+        value={tabValue}
+        onChange={handleTabChange}
+        sx={{
+          "& .Mui-selected": {
+            color: "#2AAADE",
+          },
+          "& .MuiTabs-indicator": {
+            backgroundColor: "#2AAADE",
+          },
+        }}
+      >
         <Tab label="이용 중" icon={<HomeTwoToneIcon />} />
         <Tab label="임박한 예약" icon={<InsertInvitationTwoToneIcon />} />
         <Tab label="완료된 예약" icon={<CheckCircleTwoToneIcon />} />

@@ -27,6 +27,7 @@ const WriteSpaceReviewContainer = ({
   images,
   setImages,
   handleSubmit,
+  isEditing = false,
 }) => {
   const [openConfirmDialog, setOpenConfirmDialog] = useState(false);
   const navigate = useNavigate();
@@ -53,11 +54,13 @@ const WriteSpaceReviewContainer = ({
     <Container maxWidth="md">
       <Paper elevation={3} sx={{ p: 4, my: 4 }}>
         <Typography variant="h4" component="h1" gutterBottom>
-          리뷰 작성
+          {isEditing ? "리뷰 수정" : "리뷰 작성"}
         </Typography>
-        <Typography variant="subtitle1" gutterBottom>
-          예약 번호: {reservationId}
-        </Typography>
+        {!isEditing && (
+          <Typography variant="subtitle1" gutterBottom>
+            예약 번호: {reservationId}
+          </Typography>
+        )}
         <form onSubmit={handleOpenConfirmDialog}>
           <Box mb={2}>
             <Typography variant="subtitle1" gutterBottom>
@@ -129,7 +132,7 @@ const WriteSpaceReviewContainer = ({
                 "&:hover": { backgroundColor: "#2AAADE" },
               }}
             >
-              리뷰 등록하기
+              {isEditing ? "리뷰 수정하기" : "리뷰 등록하기"}
             </Button>
           </Box>
         </form>
@@ -141,10 +144,14 @@ const WriteSpaceReviewContainer = ({
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title">{"리뷰 등록 확인"}</DialogTitle>
+        <DialogTitle id="alert-dialog-title">
+          {isEditing ? "리뷰 수정 확인" : "리뷰 등록 확인"}
+        </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            리뷰를 등록하시겠습니까?
+            {isEditing
+              ? "리뷰를 수정하시겠습니까?"
+              : "리뷰를 등록하시겠습니까?"}
           </DialogContentText>
         </DialogContent>
         <DialogActions>

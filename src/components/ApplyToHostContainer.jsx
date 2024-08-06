@@ -4,8 +4,11 @@ import {
   Container,
   Typography,
   Box,
-  Modal,
-  Paper,
+  Dialog,
+  DialogTitle,
+  DialogContentText,
+  DialogContent,
+  DialogActions,
 } from "@mui/material";
 import { updateRoleToHost } from "../api/host";
 import { useAuth } from "../hooks/useAuth";
@@ -74,45 +77,25 @@ const ApplyToHostContainer = () => {
         </Typography>
       </Box>
 
-      <Modal
+      <Dialog
         open={open}
         onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
+        aria-labelledby="dialog-title"
+        aria-describedby="dialog-description"
       >
-        <Paper
-          sx={{
-            position: "absolute",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-            width: 400,
-            bgcolor: "background.paper",
-            boxShadow: 24,
-            p: 4,
-          }}
-        >
-          <Typography
-            id="modal-modal-title"
-            variant="h6"
-            component="h2"
-            gutterBottom
-          >
-            호스트 전환 확인
-          </Typography>
-          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+        <DialogTitle id="dialog-title">호스트 전환 확인</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="dialog-description">
             호스트로 전환하시겠습니까?
-          </Typography>
-          <Box sx={{ mt: 3, display: "flex", justifyContent: "flex-end" }}>
-            <Button onClick={handleClose} sx={{ mr: 2 }}>
-              취소
-            </Button>
-            <Button variant="contained" onClick={handleConfirm}>
-              확인
-            </Button>
-          </Box>
-        </Paper>
-      </Modal>
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>취소</Button>
+          <Button onClick={handleConfirm} autoFocus>
+            확인
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Container>
   );
 };

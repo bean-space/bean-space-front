@@ -7,6 +7,11 @@ import {
   Paper,
   Modal,
   Button,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
 } from "@mui/material";
 import Carousel from "react-material-ui-carousel";
 import defaultImage from "../assets/default_house_pic.jpg";
@@ -43,7 +48,7 @@ const modifySido = (sido) => {
 const AdminSpaceApprovalList = ({ spaces, onApprove, onReject }) => {
   const [openModal, setOpenModal] = useState(false);
   const [selectedSpace, setSelectedSpace] = useState("");
-  const [confirmModalOpen, setConfirmModalOpen] = useState(false);
+  const [openConfirmDialog, setOpenConfirmDialog] = useState(false);
   const [confirmAction, setConfirmAction] = useState(null);
   const [selectedSpaceId, setSelectedSpaceId] = useState(null);
 
@@ -59,17 +64,17 @@ const AdminSpaceApprovalList = ({ spaces, onApprove, onReject }) => {
   const handleApproveClick = (spaceId) => {
     setSelectedSpaceId(spaceId);
     setConfirmAction("approve");
-    setConfirmModalOpen(true);
+    setOpenConfirmDialog(true);
   };
 
   const handleRejectClick = (spaceId) => {
     setSelectedSpaceId(spaceId);
     setConfirmAction("reject");
-    setConfirmModalOpen(true);
+    setOpenConfirmDialog(true);
   };
 
   const handleCloseConfirmModal = () => {
-    setConfirmModalOpen(false);
+    setOpenConfirmDialog(false);
     setConfirmAction(null);
     setSelectedSpaceId(null);
   };
@@ -310,57 +315,31 @@ const AdminSpaceApprovalList = ({ spaces, onApprove, onReject }) => {
           )}
         </Box>
       </Modal>
-      <Modal
-        open={confirmModalOpen}
+
+      <Dialog
+        open={openConfirmDialog}
         onClose={handleCloseConfirmModal}
-        aria-labelledby="confirm-modal-title"
-        aria-describedby="confirm-modal-description"
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+        TransitionProps={{ timeout: 0.3 }}
       >
-        <Box
-          sx={{
-            position: "absolute",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-            width: 300,
-            bgcolor: "background.paper",
-            boxShadow: 24,
-            p: 4,
-          }}
-        >
-          <Typography id="confirm-modal-title" variant="h6" component="h2">
-            {confirmAction === "approve" ? "승인 확인" : "거절 확인"}
-          </Typography>
-          <Typography id="confirm-modal-description" sx={{ mt: 2 }}>
+        <DialogTitle id="alert-dialog-title">
+          {confirmAction === "approve" ? "승인 확인" : "거절 확인"}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
             {confirmAction === "approve"
               ? "이 공간을 승인하시겠습니까?"
               : "이 공간을 거절하시겠습니까?"}
-          </Typography>
-          <Box sx={{ mt: 2, display: "flex", justifyContent: "flex-end" }}>
-            <Button
-              onClick={handleConfirmAction}
-              variant="contained"
-              sx={{
-                mr: 1,
-                backgroundColor: "#87CEEB",
-                "&:hover": { backgroundColor: "#2AAADE" },
-              }}
-            >
-              확인
-            </Button>
-            <Button
-              variant="contained"
-              onClick={handleCloseConfirmModal}
-              sx={{
-                backgroundColor: "#F17D7B",
-                "&:hover": { backgroundColor: "#F05552" },
-              }}
-            >
-              취소
-            </Button>
-          </Box>
-        </Box>
-      </Modal>
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseConfirmModal}>취소</Button>
+          <Button onClick={handleConfirmAction} autoFocus>
+            확인
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 };

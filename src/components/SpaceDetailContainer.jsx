@@ -3,6 +3,11 @@ import {
   Box,
   Button,
   Container,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
   Divider,
   Grid,
   IconButton,
@@ -21,7 +26,7 @@ import {
   MeetingRoom as MeetingRoomIcon,
   Star as StarIcon,
 } from "@mui/icons-material";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import defaultProfile from "../assets/default_profile_image.webp";
 import ReviewSection from "./ReviewSection";
 import DateRangePickerForSpaceDetail from "./DateRangePickerForSpaceDetail";
@@ -30,10 +35,12 @@ import { format } from "date-fns";
 import PeopleCountDropdownForSpaceDetail from "./PeopleCountDropdownForSpaceDetail";
 import { useSearch } from "../hooks/useSearch";
 import { useAuth } from "../hooks/useAuth";
+import { deleteReview } from "../api/space";
 
 const SpaceDetailContainer = ({
   space,
   reviews,
+  setReviews,
   currentPage,
   totalPages,
   onPageChange,
@@ -42,12 +49,21 @@ const SpaceDetailContainer = ({
   const navigate = useNavigate();
   const { searchState, setSearchState } = useSearch();
   const { isLoggedIn } = useAuth();
+  const { spaceId } = useParams();
 
   const [headCount, setHeadCount] = useState(searchState.peopleCount);
   const [dateRange, setDateRange] = useState({
     startDate: searchState.dateRange.startDate,
     endDate: searchState.dateRange.endDate,
   });
+
+  const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
+  const [reviewToDelete, setReviewToDelete] = useState(null);
+
+  const handleDeleteReview = (reviewId) => {
+    setReviewToDelete(reviewId);
+    setDeleteConfirmOpen(true);
+  };
 
   useEffect(() => {
     const queryParams = new URLSearchParams(location.search);
@@ -136,6 +152,31 @@ const SpaceDetailContainer = ({
     navigate(`/reservation?${reservationParams.toString()}`, {
       state: { space },
     });
+  };
+
+  const handleEditReview = (review) => {
+    navigate(`/edit-review/${spaceId}/${review.id}`, { state: { review } });
+  };
+
+  const confirmDeleteReview = async () => {
+    if (reviewToDelete) {
+      try {
+        await deleteReview({ spaceId, reviewId: reviewToDelete });
+        const updatedReviews = reviews.filter(
+          (review) => review.id !== reviewToDelete
+        );
+        setReviews(updatedReviews);
+        alert("리뷰가 삭제되었습니다");
+      } catch (error) {
+        if (error.response.data.msg) {
+          alert(error.response.data.msg);
+        } else {
+          alert("리뷰 삭제 중 오류가 발생했습니다");
+        }
+      }
+    }
+    setDeleteConfirmOpen(false);
+    setReviewToDelete(null);
   };
 
   return (
@@ -316,6 +357,8 @@ const SpaceDetailContainer = ({
               currentPage={currentPage}
               totalPages={totalPages}
               onPageChange={onPageChange}
+              onEditReview={handleEditReview}
+              onDeleteReview={handleDeleteReview}
             />
           </Grid>
 
@@ -423,6 +466,21 @@ const SpaceDetailContainer = ({
           </Grid>
         </Grid>
       </Container>
+      <Dialog
+        open={deleteConfirmOpen}
+        onClose={() => setDeleteConfirmOpen(false)}
+      >
+        <DialogTitle>리뷰 삭제 확인</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            정말로 이 리뷰를 삭제하시겠습니까?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setDeleteConfirmOpen(false)}>취소</Button>
+          <Button onClick={confirmDeleteReview}>확인</Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 };

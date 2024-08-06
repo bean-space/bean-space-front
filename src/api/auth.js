@@ -23,8 +23,8 @@ export const logoutUser = () => {
 export const getUserInfo = async () => {
   try {
     const { data } = await commonClient.get("/api/v1/members/profile");
-    const { nickname, email, profileImageUrl, role } = data;
-    return { success: true, nickname, email, profileImageUrl, role };
+    const { id, nickname, email, profileImageUrl, role } = data;
+    return { success: true, id, nickname, email, profileImageUrl, role };
   } catch (error) {
     return { success: false };
   }

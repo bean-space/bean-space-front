@@ -6,87 +6,136 @@ import {
   Rating,
   Paper,
   Pagination,
+  Button,
 } from "@mui/material";
 import Carousel from "react-material-ui-carousel";
 import defaultProfile from "../assets/default_profile_image.webp";
+import { useAuth } from "../hooks/useAuth";
+import EditTwoToneIcon from "@mui/icons-material/EditTwoTone";
+import DeleteForeverTwoToneIcon from "@mui/icons-material/DeleteForeverTwoTone";
 
-const Review = ({ review }) => (
-  <Box mb={3}>
-    <Box display="flex" alignItems="center" mb={1}>
-      <Avatar
-        src={review.reviewerProfileUrl || defaultProfile}
-        alt={review.reviewerName}
-      />
-      <Box ml={2}>
-        <Typography variant="subtitle1">{review.reviewerName}</Typography>
-        <Typography variant="body2" color="text.secondary">
-          {new Date().toLocaleDateString()}
-        </Typography>
+const Review = ({ review, onEdit, onDelete }) => {
+  const { id } = useAuth();
+
+  return (
+    <Box mb={3}>
+      <Box display="flex" alignItems="center" mb={1}>
+        <Avatar
+          src={review.reviewerProfileUrl || defaultProfile}
+          alt={review.reviewerName}
+        />
+        <Box ml={2}>
+          <Typography variant="subtitle1">{review.reviewerName}</Typography>
+          <Typography variant="body2" color="text.secondary">
+            {new Date().toLocaleDateString()}
+          </Typography>
+        </Box>
+        <Box ml="auto">
+          <Rating value={review.rating} readOnly size="small" />
+        </Box>
       </Box>
-      <Box ml="auto">
-        <Rating value={review.rating} readOnly size="small" />
-      </Box>
-    </Box>
-    <Typography variant="body1" sx={{ mt: 2 }}>
-      {review.content}
-    </Typography>
-    {review.imageUrlList &&
-      review.imageUrlList.length > 0 &&
-      review.imageUrlList[0] !== "" && (
-        <Box
-          sx={{
-            width: "80%",
-            margin: "5px auto",
-            mb: 3,
-            mt: 3,
-          }}
-        >
-          <Carousel
-            indicators={true}
-            indicatorContainerProps={{
-              style: {
-                position: "absolute",
-                bottom: "20px",
-                zIndex: 1,
-                marginTop: 0,
-              },
+      <Typography variant="body1" sx={{ mt: 2 }}>
+        {review.content}
+      </Typography>
+      {review.imageUrlList &&
+        review.imageUrlList.length > 0 &&
+        review.imageUrlList[0] !== "" && (
+          <Box
+            sx={{
+              width: "80%",
+              margin: "5px auto",
+              mb: 3,
+              mt: 3,
             }}
           >
-            {review.imageUrlList.map((imageUrl, index) => (
-              <Paper
-                className="mainImg"
-                key={index}
-                sx={{
-                  height: 400,
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-              >
-                <div
-                  style={{
-                    width: "100%",
-                    height: "100%",
-                    backgroundImage: `url(${imageUrl})`,
-                    backgroundPosition: "center",
-                    backgroundSize: "cover",
+            <Carousel
+              indicators={true}
+              indicatorContainerProps={{
+                style: {
+                  position: "absolute",
+                  bottom: "20px",
+                  zIndex: 1,
+                  marginTop: 0,
+                },
+              }}
+            >
+              {review.imageUrlList.map((imageUrl, index) => (
+                <Paper
+                  className="mainImg"
+                  key={index}
+                  sx={{
+                    height: 400,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
                   }}
-                  alt="Review Image"
-                />
-              </Paper>
-            ))}
-          </Carousel>
+                >
+                  <div
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      backgroundImage: `url(${imageUrl})`,
+                      backgroundPosition: "center",
+                      backgroundSize: "cover",
+                    }}
+                    alt="Review Image"
+                  />
+                </Paper>
+              ))}
+            </Carousel>
+          </Box>
+        )}
+      {id === review.reviewerId && (
+        <Box mt={2} display="flex" justifyContent="flex-end">
+          <Button
+            onClick={() => onEdit(review)}
+            sx={{
+              mr: 1,
+              border: "1px solid #2AAADE",
+              color: "#2AAADE",
+              "&:hover": {
+                backgroundColor: "#1976D20A",
+              },
+            }}
+            startIcon={<EditTwoToneIcon />}
+            variant="outlined"
+          >
+            수정
+          </Button>
+          <Button
+            onClick={() => onDelete(review.id)}
+            sx={{
+              border: "1px solid #d32f2f",
+              color: "#d32f2f",
+              "&:hover": {
+                backgroundColor: "#D32F2F0A",
+              },
+            }}
+            startIcon={<DeleteForeverTwoToneIcon />}
+            variant="outlined"
+            color="error"
+          >
+            삭제
+          </Button>
         </Box>
       )}
+      <Divider sx={{ mt: 2 }} />
+    </Box>
+  );
+};
 
-    <Divider sx={{ mt: 2 }} />
-  </Box>
-);
-
-const ReviewSection = ({ reviews, currentPage, totalPages, onPageChange }) => {
+const ReviewSection = ({
+  reviews,
+  currentPage,
+  totalPages,
+  onPageChange,
+  onEditReview,
+  onDeleteReview,
+}) => {
   const handleChange = (event, value) => {
     onPageChange(value - 1);
   };
+
   return (
     <Box mt={4}>
       <Typography
@@ -107,7 +156,12 @@ const ReviewSection = ({ reviews, currentPage, totalPages, onPageChange }) => {
       {reviews.length > 0 ? (
         <>
           {reviews.map((review, index) => (
-            <Review key={index} review={review} />
+            <Review
+              key={index}
+              review={review}
+              onEdit={onEditReview}
+              onDelete={onDeleteReview}
+            />
           ))}
           <Box display="flex" justifyContent="center" mt={3}>
             <Pagination

@@ -7,6 +7,7 @@ export const AuthProvider = ({ children }) => {
   const [authState, setAuthState] = useState({
     isLoggedIn: false,
     token: null,
+    id: null,
     nickname: null,
     email: null,
     profileImageUrl: null,
@@ -21,6 +22,7 @@ export const AuthProvider = ({ children }) => {
         setAuthState({
           isLoggedIn: true,
           token,
+          id: userdata.id,
           nickname: userdata.nickname,
           email: userdata.email,
           profileImageUrl: userdata.profileImageUrl,
@@ -31,6 +33,7 @@ export const AuthProvider = ({ children }) => {
         setAuthState({
           isLoggedIn: false,
           token: null,
+          id: null,
           nickname: null,
           email: null,
           profileImageUrl: null,
@@ -57,6 +60,7 @@ export const AuthProvider = ({ children }) => {
     setAuthState({
       isLoggedIn: false,
       token: null,
+      id: null,
       nickname: null,
       email: null,
       profileImageUrl: null,

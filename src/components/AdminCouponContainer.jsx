@@ -267,14 +267,8 @@ const AdminCouponContainer = ({ coupons, setCoupons }) => {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleDeleteCancel} sx={{ color: "#87CEEB" }}>
-            취소
-          </Button>
-          <Button
-            onClick={handleDeleteConfirm}
-            sx={{ color: "#E25350" }}
-            autoFocus
-          >
+          <Button onClick={handleDeleteCancel}>취소</Button>
+          <Button onClick={handleDeleteConfirm} autoFocus>
             삭제
           </Button>
         </DialogActions>
