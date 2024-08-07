@@ -32,6 +32,7 @@ import "dayjs/locale/ko";
 import EditCouponPage from "./pages/EditCouponPage";
 import NotFoundPage from "./pages/NotFoundPage";
 import ApplyToHostPage from "./pages/ApplyToHostPage";
+import EditSpaceReviewPage from "./pages/EditSpaceReviewPage";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -57,6 +58,10 @@ const App = () => {
                 <Route path="/signup" element={<SignupPage />} />
                 <Route path="/coupon" element={<CouponPage />} />
                 <Route path="/space/:spaceId" element={<SpaceDetailPage />} />
+                <Route
+                  path="/edit-review/:spaceId/:reviewId"
+                  element={<EditSpaceReviewPage />}
+                />
                 <Route path="/reservation" element={<ReservationPage />} />
                 <Route path="/my-reservation" element={<MyReservationPage />} />
                 <Route

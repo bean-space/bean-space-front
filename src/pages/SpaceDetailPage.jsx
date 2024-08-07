@@ -48,6 +48,7 @@ const SpaceDetailPage = () => {
       <SpaceDetailContainer
         space={space}
         reviews={reviews}
+        setReviews={setReviews}
         currentPage={currentPage}
         totalPages={totalPages}
         onPageChange={handlePageChange}

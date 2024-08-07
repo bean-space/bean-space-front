@@ -30,3 +30,20 @@ export const addReview = async ({ review, id }) => {
 
   return data;
 };
+
+export const deleteReview = async ({ spaceId, reviewId }) => {
+  const { data } = await commonClient.delete(
+    `/api/v1/spaces/${spaceId}/reviews/${reviewId}`
+  );
+
+  return data;
+};
+
+export const updateReview = async ({ review, spaceId, reviewId }) => {
+  const { data } = await commonClient.put(
+    `/api/v1/spaces/${spaceId}/reviews/${reviewId}`,
+    review
+  );
+
+  return data;
+};

@@ -159,7 +159,7 @@ const SignupContainer = () => {
       alert("회원가입에 성공했습니다!!");
       navigate("/login");
     } catch (error) {
-      if (error.response.data.msg) {
+      if (error.response?.data?.msg) {
         alert(error.response.data.msg);
       } else {
         alert("회원가입에 실패하였습니다. 다시 시도해주세요");
