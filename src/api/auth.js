@@ -23,8 +23,17 @@ export const logoutUser = () => {
 export const getUserInfo = async () => {
   try {
     const { data } = await commonClient.get("/api/v1/members/profile");
-    const { id, nickname, email, profileImageUrl, role } = data;
-    return { success: true, id, nickname, email, profileImageUrl, role };
+    const { id, nickname, email, profileImageUrl, isPhoneNumberEmpty, role } =
+      data;
+    return {
+      success: true,
+      id,
+      nickname,
+      email,
+      profileImageUrl,
+      isPhoneNumberEmpty,
+      role,
+    };
   } catch (error) {
     return { success: false };
   }
@@ -47,4 +56,19 @@ export const signupUser = async (member) => {
   const response = await commonClient.post("api/v1/auth/sign-up", member);
 
   return response;
+};
+
+export const updateSocialUserInfo = async (info) => {
+  const { data } = await commonClient.put(
+    "api/v1/members/social-profile",
+    info
+  );
+
+  return { data };
+};
+
+export const updateUserProfile = async (info) => {
+  const { data } = await commonClient.put("api/v1/members/profile", info);
+
+  return { data };
 };
