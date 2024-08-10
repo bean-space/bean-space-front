@@ -31,7 +31,7 @@ const HostSpaceFormContainer = ({ isEdit = false, initialData = null }) => {
       zipCode: "",
       streetNameAddress: "",
       detailedAddress: "",
-      sido: "",
+      sidoAndSigungu: "",
       content: "",
       defaultPeople: 1,
       maxPeople: 1,
@@ -96,12 +96,20 @@ const HostSpaceFormContainer = ({ isEdit = false, initialData = null }) => {
     setSpace({ ...space, [name]: formattedValue });
   };
 
+  const formatSidoAndSigungu = (sido, sigungu) => {
+    const formattedSido = sido.replace(/(특별자치도|특별자치시)/, "").trim();
+
+    return `${formattedSido} ${sigungu}`.trim();
+  };
+
   const handlePostcodeComplete = (data) => {
+    const sidoAndSigungu = formatSidoAndSigungu(data.sido, data.sigungu);
+
     setSpace({
       ...space,
       zipCode: data.zonecode,
       streetNameAddress: data.address,
-      sido: data.sido,
+      sidoAndSigungu: sidoAndSigungu,
     });
     setShowPostcode(false);
   };
@@ -155,7 +163,7 @@ const HostSpaceFormContainer = ({ isEdit = false, initialData = null }) => {
 
       if (isEdit) {
         const {
-          sido,
+          sidoAndSigungu,
           detailedAddress,
           streetNameAddress,
           zipCode,
@@ -269,12 +277,14 @@ const HostSpaceFormContainer = ({ isEdit = false, initialData = null }) => {
                       주소 정보
                     </Typography>
                     <Typography variant="body2" color="error" gutterBottom>
-                      주소 정보는 수정할 수 없습니다.
+                      주소 정보는 수정할 수 없습니다
+                      <br />
+                      수정하려면 공간 삭제 후 다시 등록해주세요
                     </Typography>
                     <TextField
                       fullWidth
                       label="현재 등록된 주소"
-                      value={`${space.zipCode} ${space.sido} ${space.streetNameAddress} ${space.detailedAddress}`}
+                      value={`${space.sidoAndSigungu} ${space.zipCode} ${space.streetNameAddress} ${space.detailedAddress}`}
                       InputLabelProps={{
                         style: { color: "black" },
                       }}
@@ -344,12 +354,12 @@ const HostSpaceFormContainer = ({ isEdit = false, initialData = null }) => {
                     <Grid item xs={12} sm={8}>
                       <TextField
                         fullWidth
-                        label="시/도"
+                        label="시/도 및 시/군/구"
                         InputLabelProps={{
                           style: { color: "black" },
                         }}
-                        name="sido"
-                        value={space.sido}
+                        name="sidoAndSigungu"
+                        value={space.sidoAndSigungu}
                         InputProps={{
                           readOnly: true,
                         }}

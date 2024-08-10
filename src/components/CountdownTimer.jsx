@@ -54,7 +54,11 @@ const CountdownTimer = ({ targetDate }) => {
         fontWeight="bold"
         sx={{ color: "#F17D7B" }}
       >
-        {timerComponents.length ? timerComponents : <span>발급 시작!</span>}
+        {timerComponents.length ? (
+          timerComponents
+        ) : (
+          <span>쿠폰 발급 시작! (새로고침 해주세요!)</span>
+        )}
       </Typography>
     </Box>
   );

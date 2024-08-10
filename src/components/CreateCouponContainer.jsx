@@ -8,6 +8,11 @@ import {
   Grid,
   InputAdornment,
   Paper,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
 } from "@mui/material";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import dayjs from "dayjs";
@@ -26,6 +31,7 @@ const CreateCouponContainer = () => {
     totalQuantity: "",
   });
   const navigate = useNavigate();
+  const [openConfirmDialog, setOpenConfirmDialog] = useState(false);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -71,7 +77,7 @@ const CreateCouponContainer = () => {
     return null;
   };
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = (event) => {
     event.preventDefault();
 
     for (const key in coupon) {
@@ -95,25 +101,33 @@ const CreateCouponContainer = () => {
     if (validationError) {
       alert(validationError);
     } else {
-      const couponData = {
-        ...coupon,
-        discountRate: parseInt(coupon.discountRate),
-        maxDiscount: parseInt(coupon.maxDiscount.replace(/,/g, "")),
-        issueStartAt: dayjs(coupon.issueStartAt).format("YYYY-MM-DDTHH:mm:ss"),
-        issueEndAt: dayjs(coupon.issueEndAt).format("YYYY-MM-DDTHH:mm:ss"),
-        expirationAt: dayjs(coupon.expirationAt).format("YYYY-MM-DDTHH:mm:ss"),
-      };
-      try {
-        await createCoupon(couponData);
+      setOpenConfirmDialog(true);
+    }
+  };
 
-        alert("쿠폰이 성공적으로 생성되었습니다");
-        navigate(-1);
-      } catch (error) {
-        if (error.response.data.msg) {
-          alert(error.response.data.msg);
-        } else {
-          alert("쿠폰 생성에 실패하였습니다");
-        }
+  const handleConfirmCancel = () => {
+    setOpenConfirmDialog(false);
+  };
+
+  const handleConfirmSubmit = async () => {
+    setOpenConfirmDialog(false);
+    const couponData = {
+      ...coupon,
+      discountRate: parseInt(coupon.discountRate),
+      maxDiscount: parseInt(coupon.maxDiscount.replace(/,/g, "")),
+      issueStartAt: dayjs(coupon.issueStartAt).format("YYYY-MM-DDTHH:mm:ss"),
+      issueEndAt: dayjs(coupon.issueEndAt).format("YYYY-MM-DDTHH:mm:ss"),
+      expirationAt: dayjs(coupon.expirationAt).format("YYYY-MM-DDTHH:mm:ss"),
+    };
+    try {
+      await createCoupon(couponData);
+      alert("쿠폰이 성공적으로 생성되었습니다");
+      navigate(-1);
+    } catch (error) {
+      if (error.response.data.msg) {
+        alert(error.response.data.msg);
+      } else {
+        alert("쿠폰 생성에 실패하였습니다");
       }
     }
   };
@@ -275,6 +289,25 @@ const CreateCouponContainer = () => {
           </Box>
         </Box>
       </Paper>
+      <Dialog
+        open={openConfirmDialog}
+        onClose={handleConfirmCancel}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">{"쿠폰 생성 확인"}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            정말로 쿠폰을 생성하시겠습니까?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleConfirmCancel}>취소</Button>
+          <Button onClick={handleConfirmSubmit} autoFocus>
+            확인
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Container>
   );
 };

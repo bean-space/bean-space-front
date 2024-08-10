@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Avatar,
   Box,
@@ -16,10 +16,16 @@ import { useAuth } from "../hooks/useAuth";
 
 const SocialUserInfoFormContainer = () => {
   const navigate = useNavigate();
-  const { updateSocialInfo } = useAuth();
+  const { updateSocialInfo, isLoggedIn, isPhoneNumberEmpty } = useAuth();
 
   const [phoneNumber, setPhoneNumber] = useState("");
   const [email, setEmail] = useState("");
+
+  useEffect(() => {
+    if (!isLoggedIn || !isPhoneNumberEmpty) {
+      navigate("/");
+    }
+  }, [isLoggedIn, isPhoneNumberEmpty, navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -66,6 +72,8 @@ const SocialUserInfoFormContainer = () => {
     let formattedPhoneNumber = digitsOnly.slice(0, 11);
     setPhoneNumber(formattedPhoneNumber);
   };
+
+  if (!isLoggedIn || !isPhoneNumberEmpty) return null;
 
   return (
     <Grid

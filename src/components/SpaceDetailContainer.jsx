@@ -284,7 +284,7 @@ const SpaceDetailContainer = ({
                   {space.space.listingName}
                 </Typography>
                 <Typography variant="subtitle1" gutterBottom>
-                  {space.space.sido}
+                  {space.space.sidoAndSigungu}
                 </Typography>
               </Box>
               <Box

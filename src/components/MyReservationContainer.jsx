@@ -1,7 +1,15 @@
 import { useEffect, useState } from "react";
 import { getMemberReservationList } from "../api/reservation";
 import MyReservationList from "./MyReservationList";
-import { Container, Tabs, Tab, Box, Grid, Typography } from "@mui/material";
+import {
+  Container,
+  Tabs,
+  Tab,
+  Box,
+  Grid,
+  Typography,
+  CircularProgress,
+} from "@mui/material";
 import CancelTwoToneIcon from "@mui/icons-material/CancelTwoTone";
 import CheckCircleTwoToneIcon from "@mui/icons-material/CheckCircleTwoTone";
 import CalendarMonthTwoToneIcon from "@mui/icons-material/CalendarMonthTwoTone";
@@ -9,10 +17,22 @@ import CalendarMonthTwoToneIcon from "@mui/icons-material/CalendarMonthTwoTone";
 const MyReservationContainer = () => {
   const [reservations, setReservations] = useState([]);
   const [tabValue, setTabValue] = useState(0);
+  const [loading, setLoading] = useState(true);
 
   const fetchMyReservations = async () => {
-    const data = await getMemberReservationList();
-    setReservations(data);
+    setLoading(true);
+    try {
+      const data = await getMemberReservationList();
+      setReservations(data);
+    } catch (error) {
+      if (error.response.data.msg) {
+        alert(error.response.data.msg);
+      } else {
+        alert("예약 목록을 불러올 수 없습니다");
+      }
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -60,6 +80,21 @@ const MyReservationContainer = () => {
       </Box>
     </Grid>
   );
+
+  if (loading) {
+    return (
+      <Container maxWidth="xl">
+        <Box
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          minHeight="50vh"
+        >
+          <CircularProgress sx={{ color: "#87CEEB" }} />
+        </Box>
+      </Container>
+    );
+  }
 
   return (
     <Container maxWidth="xl">

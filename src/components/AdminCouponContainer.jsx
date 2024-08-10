@@ -165,7 +165,7 @@ const AdminCouponContainer = ({ coupons, setCoupons }) => {
               <Grid item xs={12} sm={6} md={3} key={coupon.id}>
                 <Card sx={{ padding: 0.5 }}>
                   <CardContent>
-                    <Typography variant="h6" sx={{ ml: 0.5 }} gutterBottom>
+                    <Typography variant="h6" gutterBottom>
                       {coupon.name}
                     </Typography>
                     <Grid container spacing={0.5}>
