@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { updateCoupon } from "../api/admin";
 import dayjs from "dayjs";
@@ -6,6 +6,11 @@ import {
   Box,
   Button,
   Container,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
   Grid,
   InputAdornment,
   Paper,
@@ -16,6 +21,7 @@ import { DateTimePicker } from "@mui/x-date-pickers";
 
 const EditCouponContainer = ({ coupon, setCoupon }) => {
   const navigate = useNavigate();
+  const [openConfirmDialog, setOpenConfirmDialog] = useState(false);
 
   const formattedCoupon = useMemo(() => {
     if (!coupon) return null;
@@ -102,24 +108,33 @@ const EditCouponContainer = ({ coupon, setCoupon }) => {
     if (validationError) {
       alert(validationError);
     } else {
-      const couponData = {
-        ...coupon,
-        discountRate: parseInt(coupon.discountRate),
-        maxDiscount: parseInt(coupon.maxDiscount.replace(/,/g, "")),
-        issueStartAt: dayjs(coupon.issueStartAt).format("YYYY-MM-DDTHH:mm:ss"),
-        issueEndAt: dayjs(coupon.issueEndAt).format("YYYY-MM-DDTHH:mm:ss"),
-        expirationAt: dayjs(coupon.expirationAt).format("YYYY-MM-DDTHH:mm:ss"),
-      };
-      try {
-        await updateCoupon({ coupon: couponData, id: couponData.id });
-        alert("쿠폰이 성공적으로 수정되었습니다");
-        navigate(-1);
-      } catch (error) {
-        if (error.response.data.msg) {
-          alert(error.response.data.msg);
-        } else {
-          alert("쿠폰 수정에 실패하였습니다");
-        }
+      setOpenConfirmDialog(true);
+    }
+  };
+
+  const handleConfirmCancel = () => {
+    setOpenConfirmDialog(false);
+  };
+
+  const handleConfirmSubmit = async () => {
+    setOpenConfirmDialog(false);
+    const couponData = {
+      ...coupon,
+      discountRate: parseInt(coupon.discountRate),
+      maxDiscount: parseInt(coupon.maxDiscount.replace(/,/g, "")),
+      issueStartAt: dayjs(coupon.issueStartAt).format("YYYY-MM-DDTHH:mm:ss"),
+      issueEndAt: dayjs(coupon.issueEndAt).format("YYYY-MM-DDTHH:mm:ss"),
+      expirationAt: dayjs(coupon.expirationAt).format("YYYY-MM-DDTHH:mm:ss"),
+    };
+    try {
+      await updateCoupon({ coupon: couponData, id: couponData.id });
+      alert("쿠폰이 성공적으로 수정되었습니다");
+      navigate(-1);
+    } catch (error) {
+      if (error.response.data.msg) {
+        alert(error.response.data.msg);
+      } else {
+        alert("쿠폰 수정에 실패하였습니다");
       }
     }
   };
@@ -285,6 +300,25 @@ const EditCouponContainer = ({ coupon, setCoupon }) => {
           </Box>
         </Box>
       </Paper>
+      <Dialog
+        open={openConfirmDialog}
+        onClose={handleConfirmCancel}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">{"쿠폰 수정 확인"}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            정말로 쿠폰을 수정하시겠습니까?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleConfirmCancel}>취소</Button>
+          <Button onClick={handleConfirmSubmit} autoFocus>
+            수정
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Container>
   );
 };

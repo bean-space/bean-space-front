@@ -35,7 +35,7 @@ const ReservationPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const { isLoggedIn } = useAuth();
+  const { isLoggedIn, isPhoneNumberEmpty } = useAuth();
   const { space } = location.state || {};
   const searchParams = new URLSearchParams(location.search);
   const checkIn = searchParams.get("checkIn");
@@ -80,10 +80,10 @@ const ReservationPage = () => {
   }, []);
 
   useEffect(() => {
-    if (!isLoggedIn) {
+    if (!isLoggedIn || isPhoneNumberEmpty) {
       navigate(-1);
     }
-  }, [isLoggedIn, navigate]);
+  }, [isLoggedIn, isPhoneNumberEmpty, navigate]);
 
   useEffect(() => {
     if (space) {

@@ -17,7 +17,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import defaultProfile from "../assets/default_profile_image.webp";
 
 function Header() {
-  const { role } = useAuth();
+  const { role, isLoading } = useAuth();
 
   switch (role) {
     case "MEMBER":
@@ -27,11 +27,48 @@ function Header() {
     case "ADMIN":
       return <AdminHeader />;
     case null:
-      return <LoggedOutHeader />;
+      if (isLoading) {
+        return <DefaultHeader />;
+      } else {
+        return <LoggedOutHeader />;
+      }
     default:
-      return <LoggedOutHeader />;
+      return <DefaultHeader />;
   }
 }
+
+const DefaultHeader = () => {
+  return (
+    <AppBar position="fixed" sx={{ backgroundColor: "#F7EFDC" }}>
+      <Container maxWidth="xl">
+        <Toolbar disableGutters>
+          <Link to={"/"} style={{ textDecoration: "none" }}>
+            <img
+              src={LogoSrc}
+              alt="Logo"
+              style={{ height: 40, marginRight: 5 }}
+            />
+          </Link>
+          <Link to={"/"} style={{ textDecoration: "none" }}>
+            <Typography
+              variant="h6"
+              noWrap
+              sx={{
+                mr: 2,
+                color: "black",
+                textDecoration: "none",
+                marginRight: 10,
+              }}
+            >
+              빈 공간 - Bean Space
+            </Typography>
+          </Link>
+          <Box sx={{ flexGrow: 1 }} />
+        </Toolbar>
+      </Container>
+    </AppBar>
+  );
+};
 
 const LoggedOutHeader = () => {
   const navigate = useNavigate();

@@ -8,16 +8,29 @@ import {
   CardContent,
   Container,
   Grid,
+  CircularProgress,
 } from "@mui/material";
 import CountdownTimer from "./CountdownTimer";
 
 const CouponContainer = () => {
   const [coupons, setCoupons] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const fetchCoupons = async () => {
-    const data = await getCouponList();
-    const sortedCoupons = sortCoupons(data);
-    setCoupons(sortedCoupons);
+    setLoading(true);
+    try {
+      const data = await getCouponList();
+      const sortedCoupons = sortCoupons(data);
+      setCoupons(sortedCoupons);
+    } catch (error) {
+      if (error.response.data.msg) {
+        alert(error.response.data.msg);
+      } else {
+        alert("쿠폰 목록을 불러올 수 없습니다");
+      }
+    } finally {
+      setLoading(false);
+    }
   };
 
   const sortCoupons = (coupons) => {
@@ -92,7 +105,10 @@ const CouponContainer = () => {
       >
         <Box>
           <Typography variant="body1" align="center" gutterBottom>
-            발급 마감 시간: {formatDateTime(coupon.issueEndAt)}
+            {isStarted ? "발급 마감 시간" : "발급 시작 시간"}:{" "}
+            {formatDateTime(
+              isStarted ? coupon.issueEndAt : coupon.issueStartAt
+            )}
           </Typography>
           <Typography variant="h6" align="center" gutterBottom>
             {isStarted && !isEnded && !isOutofStock
@@ -130,6 +146,22 @@ const CouponContainer = () => {
       </Box>
     );
   };
+
+  if (loading) {
+    return (
+      <Container maxWidth="lg">
+        <Box
+          my={4}
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          minHeight="50vh"
+        >
+          <CircularProgress sx={{ color: "#87CEEB" }} />
+        </Box>
+      </Container>
+    );
+  }
 
   return (
     <Container maxWidth="lg">

@@ -3,6 +3,7 @@ import { useAuth } from "../hooks/useAuth";
 import { useEffect, useState } from "react";
 import AdminCouponContainer from "../components/AdminCouponContainer";
 import { getCouponList } from "../api/admin";
+import { Box, CircularProgress } from "@mui/material";
 
 const AdminCouponPage = () => {
   const { role, isLoggedIn } = useAuth();
@@ -34,7 +35,20 @@ const AdminCouponPage = () => {
   }, [isLoading, isLoggedIn, role, navigate]);
 
   if (!isLoggedIn || role !== "ADMIN" || isLoading) {
-    return <div>로딩 중...</div>;
+    return (
+      <div>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "50vh",
+          }}
+        >
+          <CircularProgress sx={{ color: "#87CEEB" }} />
+        </Box>
+      </div>
+    );
   }
 
   return (

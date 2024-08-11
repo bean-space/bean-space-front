@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import {
   Box,
   Button,
+  CircularProgress,
   Container,
   Dialog,
   DialogActions,
@@ -24,30 +25,28 @@ const HostSpacePage = () => {
   const [spaceToDelete, setSpaceToDelete] = useState(null);
 
   const fetchSpaces = async () => {
-    const data = await getHostSpaceList();
-
-    setSpaces(data);
+    try {
+      const data = await getHostSpaceList();
+      setSpaces(data);
+    } catch (error) {
+      alert("공간 목록을 불러오는데 실패했습니다.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   useEffect(() => {
-    fetchSpaces();
-  }, []);
-
-  useEffect(() => {
-    const checkAuth = async () => {
-      await new Promise((resolve) => setTimeout(resolve, 100));
-      setIsLoading(false);
-    };
-
-    checkAuth();
-  }, []);
-
-  useEffect(() => {
-    if (!isLoading && (!isLoggedIn || role !== "HOST")) {
+    if (!isLoggedIn || role !== "HOST") {
       alert("호스트만 접근할 수 있는 페이지입니다.");
       navigate("/");
     }
   }, [isLoading, isLoggedIn, role, navigate]);
+
+  useEffect(() => {
+    if (isLoggedIn && role === "HOST") {
+      fetchSpaces();
+    }
+  }, []);
 
   const handleEdit = (spaceId) => {
     const spaceToEdit = spaces.find((space) => space.id === spaceId);
@@ -69,7 +68,7 @@ const HostSpacePage = () => {
         alert("공간이 삭제되었습니다");
         setSpaces(spaces.filter((space) => space.id !== spaceToDelete));
       } catch (error) {
-        if (error.response.data.msg) {
+        if (error.response && error.response.data && error.response.data.msg) {
           alert(error.response.data.msg);
         } else {
           alert("공간 삭제에 실패했습니다.");
@@ -85,8 +84,21 @@ const HostSpacePage = () => {
     setSpaceToDelete(null);
   };
 
-  if (!isLoggedIn || role !== "HOST" || isLoading) {
-    return <div>로딩 중...</div>;
+  if (isLoading) {
+    return (
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        minHeight="100vh"
+      >
+        <CircularProgress sx={{ color: "#87CEEB" }} />
+      </Box>
+    );
+  }
+
+  if (!isLoggedIn || role !== "HOST") {
+    return null;
   }
 
   return (

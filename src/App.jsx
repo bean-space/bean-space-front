@@ -33,6 +33,8 @@ import EditCouponPage from "./pages/EditCouponPage";
 import NotFoundPage from "./pages/NotFoundPage";
 import ApplyToHostPage from "./pages/ApplyToHostPage";
 import EditSpaceReviewPage from "./pages/EditSpaceReviewPage";
+import SocialUserInfoUpdatePage from "./pages/SocialUserInfoUpdatePage";
+import MyProfileEditPage from "./pages/MyProfileEditPage";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -56,6 +58,10 @@ const App = () => {
                 <Route path="/space/search" element={<SearchResultPage />} />
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/signup" element={<SignupPage />} />
+                <Route
+                  path="/social-user-info-update"
+                  element={<SocialUserInfoUpdatePage />}
+                />
                 <Route path="/coupon" element={<CouponPage />} />
                 <Route path="/space/:spaceId" element={<SpaceDetailPage />} />
                 <Route
@@ -69,6 +75,10 @@ const App = () => {
                   element={<WriteSpaceReviewPage />}
                 />
                 <Route path="/my-profile" element={<MyProfilePage />} />
+                <Route
+                  path="/my-profile/edit"
+                  element={<MyProfileEditPage />}
+                />
                 <Route path="/wishlist" element={<MyWishListPage />} />
                 <Route path="/my-coupon" element={<MyCouponPage />} />
                 <Route path="/apply-to-host" element={<ApplyToHostPage />} />

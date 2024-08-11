@@ -6,11 +6,13 @@ const AuthContext = createContext(null);
 export const AuthProvider = ({ children }) => {
   const [authState, setAuthState] = useState({
     isLoggedIn: false,
+    isLoading: true,
     token: null,
     id: null,
     nickname: null,
     email: null,
     profileImageUrl: null,
+    isPhoneNumberEmpty: null,
     role: null,
   });
 
@@ -21,25 +23,31 @@ export const AuthProvider = ({ children }) => {
       if (userdata.success) {
         setAuthState({
           isLoggedIn: true,
+          isLoading: false,
           token,
           id: userdata.id,
           nickname: userdata.nickname,
           email: userdata.email,
           profileImageUrl: userdata.profileImageUrl,
+          isPhoneNumberEmpty: userdata.isPhoneNumberEmpty,
           role: userdata.role,
         });
       } else {
         localStorage.removeItem("token");
         setAuthState({
           isLoggedIn: false,
+          isLoading: false,
           token: null,
           id: null,
           nickname: null,
           email: null,
           profileImageUrl: null,
+          isPhoneNumberEmpty: null,
           role: null,
         });
       }
+    } else {
+      setAuthState((prevState) => ({ ...prevState, isLoading: false }));
     }
   };
 
@@ -59,11 +67,13 @@ export const AuthProvider = ({ children }) => {
     logoutUser();
     setAuthState({
       isLoggedIn: false,
+      isLoading: false,
       token: null,
       id: null,
       nickname: null,
       email: null,
       profileImageUrl: null,
+      isPhoneNumberEmpty: null,
       role: null,
     });
   };
@@ -81,9 +91,34 @@ export const AuthProvider = ({ children }) => {
     await fetchUserInfo();
   };
 
+  const updateSocialInfo = (email) => {
+    setAuthState((prevState) => ({
+      ...prevState,
+      email,
+      isPhoneNumberEmpty: false,
+    }));
+  };
+
+  const updateProfileInfo = (updatedProfileData) => {
+    setAuthState((prevState) => ({
+      ...prevState,
+      email: updatedProfileData.email,
+      nickname: updatedProfileData.nickname,
+      profileImageUrl: updatedProfileData.profileImageUrl,
+    }));
+  };
+
   return (
     <AuthContext.Provider
-      value={{ ...authState, login, logout, kakaoSocialLogin, updateAuthState }}
+      value={{
+        ...authState,
+        login,
+        logout,
+        kakaoSocialLogin,
+        updateAuthState,
+        updateSocialInfo,
+        updateProfileInfo,
+      }}
     >
       {children}
     </AuthContext.Provider>

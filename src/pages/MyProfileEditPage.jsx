@@ -1,9 +1,9 @@
 import { useEffect } from "react";
-import MyProfileContainer from "../components/MyProfileContainer";
 import { useAuth } from "../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
+import MyProfileEditContainer from "../components/MyProfileEditContainer";
 
-const MyProfilePage = () => {
+const MyProfileEditPage = () => {
   const { isLoggedIn, isLoading } = useAuth();
   const navigate = useNavigate();
 
@@ -23,10 +23,10 @@ const MyProfilePage = () => {
   }
 
   return (
-    <div>
-      <MyProfileContainer />
+    <div style={{ marginTop: "100px" }}>
+      <MyProfileEditContainer />
     </div>
   );
 };
 
-export default MyProfilePage;
+export default MyProfileEditPage;

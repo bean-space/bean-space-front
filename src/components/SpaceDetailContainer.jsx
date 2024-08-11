@@ -48,7 +48,7 @@ const SpaceDetailContainer = ({
   const location = useLocation();
   const navigate = useNavigate();
   const { searchState, setSearchState } = useSearch();
-  const { isLoggedIn } = useAuth();
+  const { isLoggedIn, isPhoneNumberEmpty } = useAuth();
   const { spaceId } = useParams();
 
   const [headCount, setHeadCount] = useState(searchState.peopleCount);
@@ -59,10 +59,25 @@ const SpaceDetailContainer = ({
 
   const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
   const [reviewToDelete, setReviewToDelete] = useState(null);
+  const [openPhoneNumberModal, setOpenPhoneNumberModal] = useState(false);
 
   const handleDeleteReview = (reviewId) => {
     setReviewToDelete(reviewId);
     setDeleteConfirmOpen(true);
+  };
+
+  useEffect(() => {
+    if (isLoggedIn && isPhoneNumberEmpty) {
+      setOpenPhoneNumberModal(true);
+    }
+  }, [isLoggedIn, isPhoneNumberEmpty]);
+
+  const handleClosePhoneNumberModal = () => {
+    setOpenPhoneNumberModal(false);
+  };
+
+  const handleNavigateToPhoneNumberInput = () => {
+    navigate("/social-user-info-update");
   };
 
   useEffect(() => {
@@ -139,6 +154,11 @@ const SpaceDetailContainer = ({
   const handleReservation = () => {
     if (!isLoggedIn) {
       alert("예약하려면 로그인이 필요합니다.");
+      return;
+    }
+
+    if (isPhoneNumberEmpty) {
+      setOpenPhoneNumberModal(true);
       return;
     }
 
@@ -264,7 +284,7 @@ const SpaceDetailContainer = ({
                   {space.space.listingName}
                 </Typography>
                 <Typography variant="subtitle1" gutterBottom>
-                  {space.space.sido}
+                  {space.space.sidoAndSigungu}
                 </Typography>
               </Box>
               <Box
@@ -479,6 +499,21 @@ const SpaceDetailContainer = ({
         <DialogActions>
           <Button onClick={() => setDeleteConfirmOpen(false)}>취소</Button>
           <Button onClick={confirmDeleteReview}>확인</Button>
+        </DialogActions>
+      </Dialog>
+      <Dialog open={openPhoneNumberModal} onClose={handleClosePhoneNumberModal}>
+        <DialogTitle>전화번호 정보 필요</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            전화번호 정보가 없어 예약이 불가능합니다 <br />
+            전화번호 정보 입력 페이지로 이동하시겠습니까?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClosePhoneNumberModal}>취소</Button>
+          <Button onClick={handleNavigateToPhoneNumberInput} autoFocus>
+            확인
+          </Button>
         </DialogActions>
       </Dialog>
     </div>
