@@ -36,17 +36,13 @@ const HostSpacePage = () => {
   };
 
   useEffect(() => {
-    if (!isLoggedIn || role !== "HOST") {
+    if (isLoggedIn && role === "HOST") {
+      fetchSpaces();
+    } else if (!isLoading) {
       alert("호스트만 접근할 수 있는 페이지입니다.");
       navigate("/");
     }
-  }, [isLoading, isLoggedIn, role, navigate]);
-
-  useEffect(() => {
-    if (isLoggedIn && role === "HOST") {
-      fetchSpaces();
-    }
-  }, []);
+  }, [isLoggedIn, role, navigate, isLoading]);
 
   const handleEdit = (spaceId) => {
     const spaceToEdit = spaces.find((space) => space.id === spaceId);
