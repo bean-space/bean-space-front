@@ -4,12 +4,16 @@ import { searchSpaces } from "../api/space";
 import Pagination from "@mui/material/Pagination";
 import SpaceCardList from "../components/SpaceCardList";
 import SearchBar from "../components/SearchBar";
+import { Box, CircularProgress } from "@mui/material";
+import { useSearch } from "../hooks/useSearch";
 
 const SearchResultPage = () => {
+  const { searchState, updateSearchState } = useSearch();
   const location = useLocation();
   const navigate = useNavigate();
   const [spaces, setSpaces] = useState([]);
   const [totalPages, setTotalPages] = useState(1);
+  const [isLoading, setIsLoading] = useState(true);
 
   const queryParams = useMemo(
     () => new URLSearchParams(location.search),
@@ -21,27 +25,89 @@ const SearchResultPage = () => {
     [queryParams]
   );
 
+  const currentSort = useMemo(() => {
+    const sortParam = queryParams.get("sort");
+    switch (sortParam) {
+      case "rating":
+        return 0;
+      case null:
+      case "":
+        return 1;
+      case "popular":
+        return 2;
+      default:
+        return 0;
+    }
+  }, [queryParams]);
+
+  useEffect(() => {
+    updateSearchState({ sortOption: currentSort });
+  }, [currentSort, updateSearchState]);
+
+  const getSortParam = (option) => {
+    switch (option) {
+      case 0:
+        return "rating";
+      case 1:
+        return null;
+      case 2:
+        return "popular";
+      default:
+        return "rating";
+    }
+  };
+
   const fetchResults = useCallback(
     async (page) => {
+      setIsLoading(true);
       const searchParams = new URLSearchParams(queryParams);
       searchParams.set("page", page - 1);
       searchParams.set("size", 12);
+      const sortParam = getSortParam(searchState.sortOption);
+      if (sortParam) {
+        searchParams.set("sort", sortParam);
+      } else {
+        searchParams.delete("sort");
+      }
 
-      const response = await searchSpaces(searchParams);
-      setSpaces(response.content);
-      setTotalPages(response.totalPages);
+      try {
+        const response = await searchSpaces(searchParams);
+        setSpaces(response.content);
+        setTotalPages(response.totalPages);
+      } catch (error) {
+        if (error.response.data.msg) {
+          alert(error.response.data.msg);
+        } else {
+          alert("공간 정보를 불러올 수 없습니다.");
+        }
+      } finally {
+        setIsLoading(false);
+      }
     },
-    [queryParams]
+    [queryParams, searchState.sortOption]
   );
 
   useEffect(() => {
     fetchResults(currentPage);
-  }, [currentPage, fetchResults]);
+  }, [currentPage, fetchResults, searchState.sortOption]);
+
+  const handleSortChange = (newSortOption) => {
+    updateSearchState({ sortOption: newSortOption });
+    const newParams = new URLSearchParams(queryParams);
+    const sortParam = getSortParam(newSortOption);
+    if (sortParam) {
+      newParams.set("sort", sortParam);
+    } else {
+      newParams.delete("sort");
+    }
+    navigate({ search: newParams.toString() }, { replace: true });
+  };
 
   const handlePageChange = (e, value) => {
     if (value !== currentPage) {
-      queryParams.set("page", value);
-      navigate({ search: queryParams.toString() }, { replace: true });
+      const newParams = new URLSearchParams(queryParams);
+      newParams.set("page", value);
+      navigate({ search: newParams.toString() }, { replace: true });
     }
   };
 
@@ -49,21 +115,40 @@ const SearchResultPage = () => {
     <div style={{ marginTop: "100px" }}>
       <SearchBar />
       <div style={{ marginTop: "1%" }}>
-        <SpaceCardList spaces={spaces} />
-        <div
-          style={{
-            marginTop: "20px",
-            display: "flex",
-            justifyContent: "center",
-          }}
-        >
-          <Pagination
-            count={totalPages}
-            page={currentPage}
-            onChange={handlePageChange}
-            color="primary"
-          />
-        </div>
+        {isLoading ? (
+          <Box
+            my={4}
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            minHeight="50vh"
+          >
+            <CircularProgress sx={{ color: "#87CEEB" }} />
+          </Box>
+        ) : (
+          <>
+            <SpaceCardList
+              spaces={spaces}
+              onSortChange={handleSortChange}
+              currentSortOption={searchState.sortOption}
+            />
+            <div
+              style={{
+                marginTop: "20px",
+                display: "flex",
+                justifyContent: "center",
+              }}
+            >
+              <Pagination
+                count={totalPages}
+                page={currentPage}
+                onChange={handlePageChange}
+                color="primary"
+                sx={{ mb: 1 }}
+              />
+            </div>
+          </>
+        )}
       </div>
     </div>
   );

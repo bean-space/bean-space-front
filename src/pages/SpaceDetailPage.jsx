@@ -1,7 +1,7 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { getSpaceItem, getSpaceReview } from "../api/space";
 import SpaceDetailContainer from "../components/SpaceDetailContainer";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 const SpaceDetailPage = () => {
   const { spaceId } = useParams();
@@ -10,6 +10,41 @@ const SpaceDetailPage = () => {
   const [reviews, setReviews] = useState([]);
   const [currentPage, setCurrentPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
+  const [sortOption, setSortOption] = useState(0);
+
+  const getSortParam = useCallback((option) => {
+    switch (option) {
+      case 0:
+        return "createdAt,desc";
+      case 1:
+        return "rating,desc";
+      case 2:
+        return "rating,asc";
+      default:
+        return "createdAt,desc";
+    }
+  }, []);
+
+  const fetchReviews = useCallback(
+    async (page, sort) => {
+      try {
+        const reviewData = await getSpaceReview({
+          id: spaceId,
+          page,
+          sort: getSortParam(sort),
+        });
+        setReviews(reviewData.content);
+        setTotalPages(reviewData.totalPages);
+      } catch (error) {
+        if (error.response.data.msg) {
+          alert(error.response.data.msg);
+        } else {
+          alert("리뷰를 불러올 수 없습니다");
+        }
+      }
+    },
+    [spaceId, getSortParam]
+  );
 
   useEffect(() => {
     if (!spaceId) {
@@ -22,12 +57,7 @@ const SpaceDetailPage = () => {
       try {
         const spaceData = await getSpaceItem(spaceId);
         setSpace(spaceData);
-        const reviewData = await getSpaceReview({
-          id: spaceId,
-          page: currentPage,
-        });
-        setReviews(reviewData.content);
-        setTotalPages(reviewData.totalPages);
+        fetchReviews(currentPage, sortOption);
       } catch (error) {
         alert("존재하지 않는 공간입니다");
         navigate(-1);
@@ -35,10 +65,15 @@ const SpaceDetailPage = () => {
     };
 
     fetchData();
-  }, [spaceId, currentPage, navigate]);
+  }, [spaceId, currentPage, sortOption, navigate, fetchReviews]);
 
   const handlePageChange = (newPage) => {
     setCurrentPage(newPage);
+  };
+
+  const handleSortChange = (newSortOption) => {
+    setSortOption(newSortOption);
+    setCurrentPage(0);
   };
 
   if (!space) return null;
@@ -52,6 +87,7 @@ const SpaceDetailPage = () => {
         currentPage={currentPage}
         totalPages={totalPages}
         onPageChange={handlePageChange}
+        onSortChange={handleSortChange}
       />
     </div>
   );

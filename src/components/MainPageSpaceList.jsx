@@ -7,79 +7,83 @@ import {
   Grid,
   Container,
   Paper,
-  Tabs,
-  Tab,
-  Rating,
+  CircularProgress,
 } from "@mui/material";
 import defaultImage from "../assets/default_house_pic.jpg";
-import { Link, useLocation } from "react-router-dom";
-import StarIcon from "@mui/icons-material/Star";
+import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { getPopularSpaces } from "../api/space";
 
-const SpaceCardList = ({ spaces, onSortChange, currentSortOption }) => {
-  const location = useLocation();
-  const queryParams = new URLSearchParams(location.search);
-  const checkIn = queryParams.get("checkIn");
-  const checkOut = queryParams.get("checkOut");
-  const headCount = queryParams.get("headCount");
+const MainPageSpaceList = () => {
+  const [popularSpaces, setPopularSpaces] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const newQueryString = new URLSearchParams({
-    checkIn: checkIn || "",
-    checkOut: checkOut || "",
-    headCount: headCount || "",
-  }).toString();
+  useEffect(() => {
+    const fetchPopularSpaces = async () => {
+      try {
+        const data = await getPopularSpaces();
+        setPopularSpaces(data);
+      } catch (error) {
+        if (error.response.data.msg) {
+          alert(error.response.data.msg);
+        } else {
+          alert("인기 숙소를 불러올 수 없습니다!");
+        }
+      } finally {
+        setIsLoading(false);
+      }
+    };
 
-  const handleSortChange = (event, newValue) => {
-    onSortChange(newValue);
-  };
+    fetchPopularSpaces();
+  }, []);
+
+  if (isLoading) {
+    return (
+      <Container maxWidth="lg">
+        <Box
+          my={4}
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          minHeight="50vh"
+        >
+          <CircularProgress sx={{ color: "#87CEEB" }} />
+        </Box>
+      </Container>
+    );
+  }
 
   return (
-    <Container maxWidth="xl">
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          mb: 2,
-        }}
+    <Container maxWidth="xl" sx={{ mt: 8, mb: 5 }}>
+      <Typography
+        variant="h5"
+        component="h2"
+        gutterBottom
+        sx={{ mb: 4, fontWeight: "bold" }}
       >
-        <Typography variant="h4" sx={{ ml: 3 }}>
-          검색 결과
-        </Typography>
-        <Tabs
-          value={currentSortOption}
-          onChange={handleSortChange}
-          aria-label="sorting options"
-          sx={{
-            "& .Mui-selected": {
-              color: "#2AAADE",
-            },
-            "& .MuiTabs-indicator": {
-              backgroundColor: "#2AAADE",
-            },
-          }}
+        최근 일주일 간 가장 인기가 많은 공간
+      </Typography>
+      {isLoading ? (
+        <Box
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          height="200px"
         >
-          <Tab label="별점 높은 순" />
-          <Tab label="새로 등록된 순" />
-          <Tab label="최근 예약 많은 순" />
-        </Tabs>
-      </Box>
-      {spaces.length === 0 ? (
-        <Typography variant="h5" align="center" sx={{ mt: 4, mb: 5 }}>
-          검색 결과가 없습니다.
-        </Typography>
+          <CircularProgress />
+        </Box>
       ) : (
         <Grid container spacing={3}>
-          {spaces.map((space) => (
-            <Grid item key={space.id} xs={12} sm={6} md={3}>
+          {popularSpaces.map((space) => (
+            <Grid item key={space.spaceId} xs={12} sm={6} md={3}>
               <Card>
                 <Box sx={{ height: "25vh", overflow: "hidden" }}>
                   <Carousel sx={{ height: "100%" }} autoPlay={false}>
                     {space.imageUrlList &&
                     space.imageUrlList.length > 0 &&
-                    space.imageUrlList[0] != "" ? (
+                    space.imageUrlList[0] !== "" ? (
                       space.imageUrlList.map((imageUrl, index) => (
                         <Paper
-                          className="mainImg"
                           key={index}
                           sx={{
                             height: "25vh",
@@ -96,13 +100,11 @@ const SpaceCardList = ({ spaces, onSortChange, currentSortOption }) => {
                               backgroundPosition: "center",
                               backgroundSize: "cover",
                             }}
-                            alt="Default Image"
                           />
                         </Paper>
                       ))
                     ) : (
                       <Paper
-                        className="defaultImg"
                         sx={{
                           height: "25vh",
                           display: "flex",
@@ -118,7 +120,6 @@ const SpaceCardList = ({ spaces, onSortChange, currentSortOption }) => {
                             backgroundPosition: "center",
                             backgroundSize: "cover",
                           }}
-                          alt="Default Image"
                         />
                       </Paper>
                     )}
@@ -126,7 +127,7 @@ const SpaceCardList = ({ spaces, onSortChange, currentSortOption }) => {
                 </Box>
                 <CardContent>
                   <Link
-                    to={`/space/${space.id}?${newQueryString}`}
+                    to={`/space/${space.spaceId}`}
                     style={{ textDecoration: "none" }}
                   >
                     <Typography
@@ -140,43 +141,15 @@ const SpaceCardList = ({ spaces, onSortChange, currentSortOption }) => {
                         WebkitLineClamp: 2,
                         WebkitBoxOrient: "vertical",
                         lineHeight: "1.2em",
-                        height: "1.6em",
+                        height: "2.4em",
                         color: "black",
                       }}
                     >
                       {space.listingName}
                     </Typography>
                   </Link>
-                  <Box
-                    sx={{
-                      display: "flex",
-                      alignItems: "center",
-                      mb: 1,
-                    }}
-                  >
-                    <Rating
-                      name="read-only"
-                      value={space.averageRating}
-                      readOnly
-                      precision={0.1}
-                      size="small"
-                      emptyIcon={
-                        <StarIcon
-                          style={{ opacity: 0.55 }}
-                          fontSize="inherit"
-                        />
-                      }
-                    />
-                    <Typography
-                      variant="body2"
-                      color="text.secondary"
-                      sx={{ ml: 1 }}
-                    >
-                      ({space.averageRating.toFixed(1)})
-                    </Typography>
-                  </Box>
                   <Typography variant="body1" color="black" fontWeight="bold">
-                    {space.price.toLocaleString()} 원/ 1박
+                    {space.price.toLocaleString()} 원 / 1박
                   </Typography>
                   <Typography variant="body2" color="text.primary">
                     기준 인원: {space.defaultPeople} 명
@@ -184,7 +157,7 @@ const SpaceCardList = ({ spaces, onSortChange, currentSortOption }) => {
                   <Typography
                     variant="body2"
                     color="text.secondary"
-                    textAlign={"right"}
+                    textAlign="right"
                   >
                     {space.sidoAndSigungu}
                   </Typography>
@@ -198,4 +171,4 @@ const SpaceCardList = ({ spaces, onSortChange, currentSortOption }) => {
   );
 };
 
-export default SpaceCardList;
+export default MainPageSpaceList;

@@ -2,6 +2,7 @@ import {
   Avatar,
   Box,
   Button,
+  Chip,
   Container,
   Dialog,
   DialogActions,
@@ -11,21 +12,15 @@ import {
   Divider,
   Grid,
   IconButton,
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
   Paper,
   Typography,
 } from "@mui/material";
 import Carousel from "react-material-ui-carousel";
 import defaulImage from "../assets/default_house_pic.jpg";
-import {
-  KingBed as KingBedIcon,
-  Bathtub as BathtubIcon,
-  MeetingRoom as MeetingRoomIcon,
-  Star as StarIcon,
-} from "@mui/icons-material";
+import MeetingRoomTwoToneIcon from "@mui/icons-material/MeetingRoomTwoTone";
+import KingBedTwoToneIcon from "@mui/icons-material/KingBedTwoTone";
+import BathtubTwoToneIcon from "@mui/icons-material/BathtubTwoTone";
+import StarIcon from "@mui/icons-material/Star";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import defaultProfile from "../assets/default_profile_image.webp";
 import ReviewSection from "./ReviewSection";
@@ -36,6 +31,25 @@ import PeopleCountDropdownForSpaceDetail from "./PeopleCountDropdownForSpaceDeta
 import { useSearch } from "../hooks/useSearch";
 import { useAuth } from "../hooks/useAuth";
 import { deleteReview } from "../api/space";
+import { useOffer } from "../hooks/useOffer";
+import FaceRetouchingNaturalTwoToneIcon from "@mui/icons-material/FaceRetouchingNaturalTwoTone";
+import LocalLaundryServiceTwoToneIcon from "@mui/icons-material/LocalLaundryServiceTwoTone";
+import AirTwoToneIcon from "@mui/icons-material/AirTwoTone";
+import DryCleaningTwoToneIcon from "@mui/icons-material/DryCleaningTwoTone";
+import WifiTwoToneIcon from "@mui/icons-material/WifiTwoTone";
+import DinnerDiningTwoToneIcon from "@mui/icons-material/DinnerDiningTwoTone";
+import OutdoorGrillTwoToneIcon from "@mui/icons-material/OutdoorGrillTwoTone";
+import DiningTwoToneIcon from "@mui/icons-material/DiningTwoTone";
+import KitchenTwoToneIcon from "@mui/icons-material/KitchenTwoTone";
+import MicrowaveTwoToneIcon from "@mui/icons-material/MicrowaveTwoTone";
+import CoffeeMakerTwoToneIcon from "@mui/icons-material/CoffeeMakerTwoTone";
+import TvTwoToneIcon from "@mui/icons-material/TvTwoTone";
+import PoolTwoToneIcon from "@mui/icons-material/PoolTwoTone";
+import HotTubTwoToneIcon from "@mui/icons-material/HotTubTwoTone";
+import IronTwoToneIcon from "@mui/icons-material/IronTwoTone";
+import DirectionsCarFilledTwoToneIcon from "@mui/icons-material/DirectionsCarFilledTwoTone";
+import LocalParkingTwoToneIcon from "@mui/icons-material/LocalParkingTwoTone";
+import PetsTwoToneIcon from "@mui/icons-material/PetsTwoTone";
 
 const SpaceDetailContainer = ({
   space,
@@ -44,12 +58,14 @@ const SpaceDetailContainer = ({
   currentPage,
   totalPages,
   onPageChange,
+  onSortChange,
 }) => {
   const location = useLocation();
   const navigate = useNavigate();
   const { searchState, setSearchState } = useSearch();
   const { isLoggedIn, isPhoneNumberEmpty } = useAuth();
   const { spaceId } = useParams();
+  const { getOfferName } = useOffer();
 
   const [headCount, setHeadCount] = useState(searchState.peopleCount);
   const [dateRange, setDateRange] = useState({
@@ -199,6 +215,27 @@ const SpaceDetailContainer = ({
     setReviewToDelete(null);
   };
 
+  const offerIcons = {
+    1: <FaceRetouchingNaturalTwoToneIcon />,
+    2: <LocalLaundryServiceTwoToneIcon />,
+    3: <AirTwoToneIcon />,
+    4: <IronTwoToneIcon />,
+    5: <WifiTwoToneIcon />,
+    6: <DinnerDiningTwoToneIcon />,
+    7: <OutdoorGrillTwoToneIcon />,
+    8: <DiningTwoToneIcon />,
+    9: <KitchenTwoToneIcon />,
+    10: <MicrowaveTwoToneIcon />,
+    11: <CoffeeMakerTwoToneIcon />,
+    12: <TvTwoToneIcon />,
+    13: <PoolTwoToneIcon />,
+    14: <HotTubTwoToneIcon />,
+    15: <DryCleaningTwoToneIcon />,
+    16: <DirectionsCarFilledTwoToneIcon />,
+    17: <LocalParkingTwoToneIcon />,
+    18: <PetsTwoToneIcon />,
+  };
+
   return (
     <div>
       <Container maxWidth="lg">
@@ -315,8 +352,8 @@ const SpaceDetailContainer = ({
                     color: "white",
                   }}
                 >
-                  {space.averageRating
-                    ? space.averageRating.toFixed(1)
+                  {space.space.averageRating
+                    ? space.space.averageRating.toFixed(1)
                     : "아직 리뷰 없음"}
                 </Typography>
               </Box>
@@ -327,7 +364,7 @@ const SpaceDetailContainer = ({
             <Box display="flex" alignItems="center" mb={3}>
               <IconButton>
                 <Avatar
-                  alt="defaul image"
+                  alt="default image"
                   src={space.host.profileImageUrl || defaultProfile}
                 />
               </IconButton>
@@ -339,37 +376,82 @@ const SpaceDetailContainer = ({
                 님의 숙소
               </Typography>
             </Box>
-            <Divider sx={{ my: 3 }} />
-            <List>
-              <ListItem>
-                <ListItemIcon>
-                  <MeetingRoomIcon />
-                </ListItemIcon>
-                <ListItemText primary={`침실 ${space.space.bedRoomCount}개`} />
-              </ListItem>
-              <ListItem>
-                <ListItemIcon>
-                  <KingBedIcon />
-                </ListItemIcon>
-                <ListItemText primary={`침대 ${space.space.bedCount}개`} />
-              </ListItem>
-              <ListItem>
-                <ListItemIcon>
-                  <BathtubIcon />
-                </ListItemIcon>
-                <ListItemText primary={`욕실 ${space.space.bathRoomCount}개`} />
-              </ListItem>
-            </List>
 
             <Divider sx={{ my: 3 }} />
 
+            <Typography variant="h6" fontWeight={600} gutterBottom>
+              공간 세부 정보
+            </Typography>
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-around",
+                alignItems: "center",
+                mt: 3,
+              }}
+            >
+              <Box sx={{ display: "flex", alignItems: "center" }}>
+                <MeetingRoomTwoToneIcon sx={{ mr: 1 }} />
+                <Typography>침실 {space.space.bedRoomCount}개</Typography>
+              </Box>
+              <Box sx={{ display: "flex", alignItems: "center" }}>
+                <KingBedTwoToneIcon sx={{ mr: 1 }} />
+                <Typography>침대 {space.space.bedCount}개</Typography>
+              </Box>
+              <Box sx={{ display: "flex", alignItems: "center" }}>
+                <BathtubTwoToneIcon sx={{ mr: 1 }} />
+                <Typography>욕실 {space.space.bathRoomCount}개</Typography>
+              </Box>
+            </Box>
+
+            <Divider sx={{ my: 3 }} />
+
+            {space.offerList && space.offerList.length > 0 && (
+              <>
+                <Typography variant="h6" fontWeight={600} mb={2} gutterBottom>
+                  편의 시설
+                </Typography>
+                <Grid container spacing={3}>
+                  {space.offerList.map((offerId) => (
+                    <Grid item key={offerId}>
+                      <Chip
+                        icon={offerIcons[offerId] || null}
+                        label={getOfferName(offerId)}
+                        variant="outlined"
+                        sx={{
+                          borderRadius: "25px",
+                          borderColor: "#7B68EE",
+                          color: "#7B68EE",
+                          height: "50px",
+                          fontSize: "1.1rem",
+                          "& .MuiChip-icon": {
+                            color: "#7B68EE",
+                            fontSize: "2rem",
+                            marginLeft: "8px",
+                          },
+                          "& .MuiChip-label": {
+                            padding: "0 16px",
+                          },
+                        }}
+                      />
+                    </Grid>
+                  ))}
+                </Grid>
+                <Divider sx={{ my: 3 }} />
+              </>
+            )}
+
+            <Typography variant="h6" fontWeight={600} gutterBottom>
+              공간 소개
+            </Typography>
             <Typography
               variant="body1"
-              sx={{ whiteSpace: "pre-wrap" }}
+              sx={{ whiteSpace: "pre-wrap", mt: 2 }}
               paragraph
             >
               {space.space.content}
             </Typography>
+
             <Divider sx={{ my: 3 }} />
 
             <ReviewSection
@@ -379,6 +461,7 @@ const SpaceDetailContainer = ({
               onPageChange={onPageChange}
               onEditReview={handleEditReview}
               onDeleteReview={handleDeleteReview}
+              onSortChange={onSortChange}
             />
           </Grid>
 

@@ -7,12 +7,15 @@ import {
   Paper,
   Pagination,
   Button,
+  Tabs,
+  Tab,
 } from "@mui/material";
 import Carousel from "react-material-ui-carousel";
 import defaultProfile from "../assets/default_profile_image.webp";
 import { useAuth } from "../hooks/useAuth";
 import EditTwoToneIcon from "@mui/icons-material/EditTwoTone";
 import DeleteForeverTwoToneIcon from "@mui/icons-material/DeleteForeverTwoTone";
+import { useState } from "react";
 
 const Review = ({ review, onEdit, onDelete }) => {
   const { id } = useAuth();
@@ -140,9 +143,17 @@ const ReviewSection = ({
   onPageChange,
   onEditReview,
   onDeleteReview,
+  onSortChange,
 }) => {
+  const [sortOption, setSortOption] = useState(0);
+
   const handleChange = (event, value) => {
     onPageChange(value - 1);
+  };
+
+  const handleSortChange = (event, newValue) => {
+    setSortOption(newValue);
+    onSortChange(newValue);
   };
 
   return (
@@ -161,6 +172,32 @@ const ReviewSection = ({
       >
         숙소 이용자들이 남긴 리얼 후기
       </Typography>
+      <Box
+        sx={{
+          width: "100%",
+          display: "flex",
+          justifyContent: "flex-end",
+          mb: 2,
+        }}
+      >
+        <Tabs
+          value={sortOption}
+          onChange={handleSortChange}
+          sx={{
+            mr: 5,
+            "& .Mui-selected": {
+              color: "#2AAADE",
+            },
+            "& .MuiTabs-indicator": {
+              backgroundColor: "#2AAADE",
+            },
+          }}
+        >
+          <Tab label="최근 작성 순" />
+          <Tab label="별점 높은 순" />
+          <Tab label="별점 낮은 순" />
+        </Tabs>
+      </Box>
       <Divider sx={{ my: 3 }} />
       {reviews.length > 0 ? (
         <>
@@ -172,7 +209,7 @@ const ReviewSection = ({
               onDelete={onDeleteReview}
             />
           ))}
-          <Box display="flex" justifyContent="center" mt={3}>
+          <Box display="flex" justifyContent="center" mt={3} mb={2}>
             <Pagination
               count={totalPages}
               page={currentPage + 1}
