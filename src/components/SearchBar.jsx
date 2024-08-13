@@ -204,7 +204,7 @@ const SearchBar = () => {
     const tomorrow = addDays(new Date(), 1);
     const dayAfterTomorrow = addDays(new Date(), 2);
 
-    setSearchState({
+    setSearchState((prevState) => ({
       searchKeyword: "",
       peopleCount: 1,
       dateRange: {
@@ -218,7 +218,8 @@ const SearchBar = () => {
       bedrooms: 0,
       beds: 0,
       bathrooms: 0,
-    });
+      sortOption: prevState.sortOption,
+    }));
     setPriceRange([0, 500000]);
   };
 

@@ -96,8 +96,10 @@ const SearchResultPage = () => {
   );
 
   useEffect(() => {
-    fetchResults(currentPage);
-  }, [currentPage, fetchResults, searchState.sortOption]);
+    if (location.search) {
+      fetchResults(currentPage);
+    }
+  }, [location.search, currentPage, fetchResults]);
 
   const handleSortChange = (newSortOption) => {
     updateSearchState({ sortOption: newSortOption });
