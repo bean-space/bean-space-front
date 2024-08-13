@@ -154,26 +154,34 @@ const SpaceCardList = ({ spaces, onSortChange, currentSortOption }) => {
                       mb: 1,
                     }}
                   >
-                    <Rating
-                      name="read-only"
-                      value={space.averageRating}
-                      readOnly
-                      precision={0.1}
-                      size="small"
-                      emptyIcon={
-                        <StarIcon
-                          style={{ opacity: 0.55 }}
-                          fontSize="inherit"
+                    {space.averageRating > 0 ? (
+                      <>
+                        <Rating
+                          name="read-only"
+                          value={space.averageRating}
+                          readOnly
+                          precision={0.1}
+                          size="small"
+                          emptyIcon={
+                            <StarIcon
+                              style={{ opacity: 0.55 }}
+                              fontSize="inherit"
+                            />
+                          }
                         />
-                      }
-                    />
-                    <Typography
-                      variant="body2"
-                      color="text.secondary"
-                      sx={{ ml: 1 }}
-                    >
-                      ({space.averageRating.toFixed(1)})
-                    </Typography>
+                        <Typography
+                          variant="body2"
+                          color="text.secondary"
+                          sx={{ ml: 1 }}
+                        >
+                          ({space.averageRating.toFixed(1)})
+                        </Typography>
+                      </>
+                    ) : (
+                      <Typography variant="body2" color="text.secondary">
+                        아직 리뷰가 없습니다
+                      </Typography>
+                    )}
                   </Box>
                   <Typography variant="body1" color="black" fontWeight="bold">
                     {space.price.toLocaleString()} 원/ 1박

@@ -9,6 +9,7 @@ import {
   Tabs,
   Tab,
   Button,
+  Chip,
 } from "@mui/material";
 import { Link } from "react-router-dom";
 import Carousel from "react-material-ui-carousel";
@@ -19,19 +20,22 @@ import HourglassBottomTwoToneIcon from "@mui/icons-material/HourglassBottomTwoTo
 import DoNotTouchTwoToneIcon from "@mui/icons-material/DoNotTouchTwoTone";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { useOffer } from "../hooks/useOffer";
 
 const HostSpaceList = ({ spaces, onEdit, onDelete }) => {
   const [openModal, setOpenModal] = useState(false);
-  const [selectedContent, setSelectedContent] = useState("");
+  const [selectedSpace, setSelectedSpace] = useState([]);
   const [value, setValue] = useState("ACTIVE");
+  const { getOfferName } = useOffer();
 
-  const handleOpenModal = (content) => {
-    setSelectedContent(content);
+  const handleOpenModal = (space) => {
+    setSelectedSpace(space);
     setOpenModal(true);
   };
 
   const handleCloseModal = () => {
     setOpenModal(false);
+    setSelectedSpace(null);
   };
 
   const handleTabChange = (event, newValue) => {
@@ -220,7 +224,7 @@ const HostSpaceList = ({ spaces, onEdit, onDelete }) => {
                   <Typography
                     component="span"
                     variant="body2"
-                    onClick={() => handleOpenModal(space.content)}
+                    onClick={() => handleOpenModal(space)}
                     sx={{
                       color: "black",
                       textDecoration: "underline",
@@ -297,20 +301,45 @@ const HostSpaceList = ({ spaces, onEdit, onDelete }) => {
             overflowY: "auto",
           }}
         >
-          <Typography
-            id="modal-modal-title"
-            variant="h6"
-            component="h2"
-            gutterBottom
-          >
-            상세 내용
-          </Typography>
-          <Typography
-            id="modal-modal-description"
-            sx={{ mt: 2, whiteSpace: "pre-wrap" }}
-          >
-            {selectedContent}
-          </Typography>
+          {selectedSpace && (
+            <>
+              <Typography
+                id="modal-modal-title"
+                variant="h6"
+                component="h2"
+                gutterBottom
+              >
+                {selectedSpace.listingName} 상세 정보
+              </Typography>
+              <Typography variant="subtitle1" gutterBottom>
+                상세 내용
+              </Typography>
+              <Typography
+                id="modal-modal-description"
+                sx={{ mt: 2, mb: 3, whiteSpace: "pre-wrap" }}
+              >
+                {selectedSpace.content}
+              </Typography>
+              <Typography variant="subtitle1" gutterBottom>
+                편의 시설 및 서비스
+              </Typography>
+              <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1, mt: 2 }}>
+                {selectedSpace.offer && selectedSpace.offer.length > 0 ? (
+                  selectedSpace.offer.map((offerId) => (
+                    <Chip
+                      key={offerId}
+                      label={getOfferName(offerId) || `Unknown (${offerId})`}
+                      variant="outlined"
+                    />
+                  ))
+                ) : (
+                  <Typography variant="body2" color="text.secondary">
+                    제공되는 편의 시설 및 서비스가 없습니다.
+                  </Typography>
+                )}
+              </Box>
+            </>
+          )}
         </Box>
       </Modal>
     </Box>
