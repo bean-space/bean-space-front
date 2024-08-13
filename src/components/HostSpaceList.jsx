@@ -95,7 +95,20 @@ const HostSpaceList = ({ spaces, onEdit, onDelete }) => {
             <Grid item key={space.id} xs={12} sm={6} md={3}>
               <Card>
                 <Box sx={{ height: "25vh", overflow: "hidden" }}>
-                  <Carousel sx={{ height: "100%" }} autoPlay={false}>
+                  <Carousel
+                    sx={{ height: "100%" }}
+                    autoPlay={false}
+                    animation="slide"
+                    indicators={true}
+                    indicatorContainerProps={{
+                      style: {
+                        position: "absolute",
+                        bottom: "20px",
+                        zIndex: 1,
+                        marginTop: 0,
+                      },
+                    }}
+                  >
                     {space.imageUrlList &&
                     space.imageUrlList.length > 0 &&
                     space.imageUrlList[0] != "" ? (
