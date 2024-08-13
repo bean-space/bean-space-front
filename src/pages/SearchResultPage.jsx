@@ -33,8 +33,12 @@ const SearchResultPage = () => {
       case null:
       case "":
         return 1;
-      case "popular":
+      case "price,asc":
         return 2;
+      case "price,desc":
+        return 3;
+      case "popular":
+        return 4;
       default:
         return 0;
     }
@@ -51,6 +55,10 @@ const SearchResultPage = () => {
       case 1:
         return null;
       case 2:
+        return "price,asc";
+      case 3:
+        return "price,desc";
+      case 4:
         return "popular";
       default:
         return "rating";

@@ -185,6 +185,7 @@ const ReviewSection = ({
           onChange={handleSortChange}
           sx={{
             mr: 5,
+            color: "#2AAADE",
             "& .Mui-selected": {
               color: "#2AAADE",
             },

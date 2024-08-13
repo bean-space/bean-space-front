@@ -317,7 +317,7 @@ const SpaceDetailContainer = ({
               }}
             >
               <Box>
-                <Typography variant="h4" gutterBottom>
+                <Typography variant="h4" sx={{ fontWeight: 600 }} gutterBottom>
                   {space.space.listingName}
                 </Typography>
                 <Typography variant="subtitle1" gutterBottom>

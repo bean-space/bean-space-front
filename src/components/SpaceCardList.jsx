@@ -39,10 +39,10 @@ const SpaceCardList = ({ spaces, onSortChange, currentSortOption }) => {
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
-          mb: 2,
+          mb: 3,
         }}
       >
-        <Typography variant="h4" sx={{ ml: 3 }}>
+        <Typography variant="h4" sx={{ ml: 3, fontWeight: 600 }}>
           검색 결과
         </Typography>
         <Tabs
@@ -60,6 +60,8 @@ const SpaceCardList = ({ spaces, onSortChange, currentSortOption }) => {
         >
           <Tab label="별점 높은 순" />
           <Tab label="새로 등록된 순" />
+          <Tab label="가격 낮은 순" />
+          <Tab label="가격 높은 순" />
           <Tab label="최근 예약 많은 순" />
         </Tabs>
       </Box>
