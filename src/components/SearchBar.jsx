@@ -164,6 +164,11 @@ const SearchBar = () => {
 
     queryParams.append("sort", "rating");
 
+    setSearchState((prev) => ({
+      ...prev,
+      sortOption: 0,
+    }));
+
     navigate(`/space/search?${queryParams.toString()}`);
   };
 
