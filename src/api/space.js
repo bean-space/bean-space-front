@@ -47,3 +47,21 @@ export const updateReview = async ({ review, spaceId, reviewId }) => {
 
   return data;
 };
+
+export const getOfferList = async () => {
+  const { data } = await commonClient.get("/api/v1/spaces/offer");
+
+  return data;
+};
+
+export const getPopularKeywords = async () => {
+  const { data } = await commonClient.get("/api/v1/spaces/popular-keywords");
+
+  return data;
+};
+
+export const getPopularSpaces = async () => {
+  const { data } = await commonClient.get("/api/v1/spaces/popular-spaces");
+
+  return data;
+};

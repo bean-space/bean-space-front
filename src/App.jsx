@@ -35,6 +35,8 @@ import ApplyToHostPage from "./pages/ApplyToHostPage";
 import EditSpaceReviewPage from "./pages/EditSpaceReviewPage";
 import SocialUserInfoUpdatePage from "./pages/SocialUserInfoUpdatePage";
 import MyProfileEditPage from "./pages/MyProfileEditPage";
+import { OfferProvider } from "./context/OfferContext";
+import ThemeWrapper from "./components/ThemeWrapper.jsx";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -44,80 +46,96 @@ dayjs.locale("ko");
 const App = () => {
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="ko">
-      <AuthProvider>
-        <SearchProvider>
-          <BrowserRouter>
-            <Header />
-            <main>
-              <Routes>
-                <Route path="/" element={<MainPage />} />
-                <Route
-                  path="/oauth2/login/callback"
-                  element={<AuthCallback />}
-                />
-                <Route path="/space/search" element={<SearchResultPage />} />
-                <Route path="/login" element={<LoginPage />} />
-                <Route path="/signup" element={<SignupPage />} />
-                <Route
-                  path="/social-user-info-update"
-                  element={<SocialUserInfoUpdatePage />}
-                />
-                <Route path="/coupon" element={<CouponPage />} />
-                <Route path="/space/:spaceId" element={<SpaceDetailPage />} />
-                <Route
-                  path="/edit-review/:spaceId/:reviewId"
-                  element={<EditSpaceReviewPage />}
-                />
-                <Route path="/reservation" element={<ReservationPage />} />
-                <Route path="/my-reservation" element={<MyReservationPage />} />
-                <Route
-                  path="/my-reservation/write-review/:spaceId/:reservationId"
-                  element={<WriteSpaceReviewPage />}
-                />
-                <Route path="/my-profile" element={<MyProfilePage />} />
-                <Route
-                  path="/my-profile/edit"
-                  element={<MyProfileEditPage />}
-                />
-                <Route path="/wishlist" element={<MyWishListPage />} />
-                <Route path="/my-coupon" element={<MyCouponPage />} />
-                <Route path="/apply-to-host" element={<ApplyToHostPage />} />
-                <Route
-                  path="/admin/space"
-                  element={<AdminSpaceApprovalPage />}
-                />
-                <Route path="/admin/coupon" element={<AdminCouponPage />} />
-                <Route
-                  path="/admin/coupon/create"
-                  element={<CreateCouponPage />}
-                />
-                <Route
-                  path="/admin/coupon/edit/:id"
-                  element={<EditCouponPage />}
-                />
-                <Route
-                  path="/host/reservation"
-                  element={<HostReservationPage />}
-                />
-                <Route path="/host/space" element={<HostSpacePage />} />
-                <Route
-                  path="/host/space/edit/:id"
-                  element={<HostSpaceEditPage />}
-                />
-                <Route
-                  path="/host/space/register"
-                  element={<HostSpaceRegisterPage />}
-                />
-                <Route
-                  path="/host/statistics"
-                  element={<HostStatisticsPage />}
-                />
-                <Route path="*" element={<NotFoundPage />} />
-              </Routes>
-            </main>
-          </BrowserRouter>
-        </SearchProvider>
-      </AuthProvider>
+      <ThemeWrapper>
+        <AuthProvider>
+          <OfferProvider>
+            <SearchProvider>
+              <BrowserRouter>
+                <Header />
+                <main>
+                  <Routes>
+                    <Route path="/" element={<MainPage />} />
+                    <Route
+                      path="/oauth2/login/callback"
+                      element={<AuthCallback />}
+                    />
+                    <Route
+                      path="/space/search"
+                      element={<SearchResultPage />}
+                    />
+                    <Route path="/login" element={<LoginPage />} />
+                    <Route path="/signup" element={<SignupPage />} />
+                    <Route
+                      path="/social-user-info-update"
+                      element={<SocialUserInfoUpdatePage />}
+                    />
+                    <Route path="/coupon" element={<CouponPage />} />
+                    <Route
+                      path="/space/:spaceId"
+                      element={<SpaceDetailPage />}
+                    />
+                    <Route
+                      path="/edit-review/:spaceId/:reviewId"
+                      element={<EditSpaceReviewPage />}
+                    />
+                    <Route path="/reservation" element={<ReservationPage />} />
+                    <Route
+                      path="/my-reservation"
+                      element={<MyReservationPage />}
+                    />
+                    <Route
+                      path="/my-reservation/write-review/:spaceId/:reservationId"
+                      element={<WriteSpaceReviewPage />}
+                    />
+                    <Route path="/my-profile" element={<MyProfilePage />} />
+                    <Route
+                      path="/my-profile/edit"
+                      element={<MyProfileEditPage />}
+                    />
+                    <Route path="/wishlist" element={<MyWishListPage />} />
+                    <Route path="/my-coupon" element={<MyCouponPage />} />
+                    <Route
+                      path="/apply-to-host"
+                      element={<ApplyToHostPage />}
+                    />
+                    <Route
+                      path="/admin/space"
+                      element={<AdminSpaceApprovalPage />}
+                    />
+                    <Route path="/admin/coupon" element={<AdminCouponPage />} />
+                    <Route
+                      path="/admin/coupon/create"
+                      element={<CreateCouponPage />}
+                    />
+                    <Route
+                      path="/admin/coupon/edit/:id"
+                      element={<EditCouponPage />}
+                    />
+                    <Route
+                      path="/host/reservation"
+                      element={<HostReservationPage />}
+                    />
+                    <Route path="/host/space" element={<HostSpacePage />} />
+                    <Route
+                      path="/host/space/edit/:id"
+                      element={<HostSpaceEditPage />}
+                    />
+                    <Route
+                      path="/host/space/register"
+                      element={<HostSpaceRegisterPage />}
+                    />
+                    <Route
+                      path="/host/statistics"
+                      element={<HostStatisticsPage />}
+                    />
+                    <Route path="*" element={<NotFoundPage />} />
+                  </Routes>
+                </main>
+              </BrowserRouter>
+            </SearchProvider>
+          </OfferProvider>
+        </AuthProvider>
+      </ThemeWrapper>
     </LocalizationProvider>
   );
 };

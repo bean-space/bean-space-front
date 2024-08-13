@@ -71,6 +71,7 @@ const LoginContainer = () => {
     const success = await login({ phoneNumber, password });
     if (success) {
       const previousUrl = localStorage.getItem("previousUrl");
+      alert("로그인에 성공하였습니다!");
       if (previousUrl) {
         localStorage.removeItem("previousUrl");
         navigate(previousUrl);

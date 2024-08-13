@@ -7,11 +7,15 @@ import {
   Grid,
   Container,
   Paper,
+  Tabs,
+  Tab,
+  Rating,
 } from "@mui/material";
 import defaultImage from "../assets/default_house_pic.jpg";
 import { Link, useLocation } from "react-router-dom";
+import StarIcon from "@mui/icons-material/Star";
 
-const SpaceCardList = ({ spaces }) => {
+const SpaceCardList = ({ spaces, onSortChange, currentSortOption }) => {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const checkIn = queryParams.get("checkIn");
@@ -24,11 +28,43 @@ const SpaceCardList = ({ spaces }) => {
     headCount: headCount || "",
   }).toString();
 
+  const handleSortChange = (event, newValue) => {
+    onSortChange(newValue);
+  };
+
   return (
     <Container maxWidth="xl">
-      <Typography variant="h4" gutterBottom sx={{ ml: 3 }}>
-        검색 결과
-      </Typography>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          mb: 3,
+        }}
+      >
+        <Typography variant="h4" sx={{ ml: 3, fontWeight: 600 }}>
+          검색 결과
+        </Typography>
+        <Tabs
+          value={currentSortOption}
+          onChange={handleSortChange}
+          aria-label="sorting options"
+          sx={{
+            "& .Mui-selected": {
+              color: "#2AAADE",
+            },
+            "& .MuiTabs-indicator": {
+              backgroundColor: "#2AAADE",
+            },
+          }}
+        >
+          <Tab label="별점 높은 순" />
+          <Tab label="새로 등록된 순" />
+          <Tab label="가격 낮은 순" />
+          <Tab label="가격 높은 순" />
+          <Tab label="최근 예약 많은 순" />
+        </Tabs>
+      </Box>
       {spaces.length === 0 ? (
         <Typography variant="h5" align="center" sx={{ mt: 4, mb: 5 }}>
           검색 결과가 없습니다.
@@ -113,6 +149,42 @@ const SpaceCardList = ({ spaces }) => {
                       {space.listingName}
                     </Typography>
                   </Link>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      mb: 1,
+                    }}
+                  >
+                    {space.averageRating > 0 ? (
+                      <>
+                        <Rating
+                          name="read-only"
+                          value={space.averageRating}
+                          readOnly
+                          precision={0.1}
+                          size="small"
+                          emptyIcon={
+                            <StarIcon
+                              style={{ opacity: 0.55 }}
+                              fontSize="inherit"
+                            />
+                          }
+                        />
+                        <Typography
+                          variant="body2"
+                          color="text.secondary"
+                          sx={{ ml: 1 }}
+                        >
+                          ({space.averageRating.toFixed(1)})
+                        </Typography>
+                      </>
+                    ) : (
+                      <Typography variant="body2" color="text.secondary">
+                        아직 리뷰가 없습니다
+                      </Typography>
+                    )}
+                  </Box>
                   <Typography variant="body1" color="black" fontWeight="bold">
                     {space.price.toLocaleString()} 원/ 1박
                   </Typography>

@@ -16,11 +16,20 @@ import { useNavigate } from "react-router-dom";
 
 const ApplyToHostContainer = () => {
   const [open, setOpen] = useState(false);
-  const { updateAuthState } = useAuth();
+  const { updateAuthState, isPhoneNumberEmpty } = useAuth();
   const navigate = useNavigate();
+  const [openPhoneNumberModal, setOpenPhoneNumberModal] = useState(false);
 
-  const handleOpen = () => setOpen(true);
+  const handleOpen = () => {
+    if (isPhoneNumberEmpty) {
+      setOpenPhoneNumberModal(true);
+    } else {
+      setOpen(true);
+    }
+  };
   const handleClose = () => setOpen(false);
+
+  const handleClosePhoneNumberModal = () => setOpenPhoneNumberModal(false);
 
   const handleConfirm = async () => {
     try {
@@ -36,6 +45,11 @@ const ApplyToHostContainer = () => {
       }
     }
     handleClose();
+  };
+
+  const handleNavigateToPhoneNumberInput = () => {
+    handleClosePhoneNumberModal();
+    navigate("/social-user-info-update");
   };
 
   return (
@@ -92,6 +106,22 @@ const ApplyToHostContainer = () => {
         <DialogActions>
           <Button onClick={handleClose}>취소</Button>
           <Button onClick={handleConfirm} autoFocus>
+            확인
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      <Dialog open={openPhoneNumberModal} onClose={handleClosePhoneNumberModal}>
+        <DialogTitle>전화번호 정보 필요</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            전화번호 정보가 없어 예약이 불가능합니다 <br />
+            전화번호 정보 입력 페이지로 이동하시겠습니까?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClosePhoneNumberModal}>취소</Button>
+          <Button onClick={handleNavigateToPhoneNumberInput} autoFocus>
             확인
           </Button>
         </DialogActions>

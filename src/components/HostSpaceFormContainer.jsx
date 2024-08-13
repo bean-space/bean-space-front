@@ -16,12 +16,15 @@ import {
   DialogContent,
   DialogContentText,
   DialogActions,
+  FormControlLabel,
+  Checkbox,
 } from "@mui/material";
 import DaumPostcode from "react-daum-postcode";
 import ImageUploader from "./ImageUploader";
 import axios from "axios";
 import { createSpace, updateSpace } from "../api/host";
 import { useNavigate } from "react-router-dom";
+import { useOffer } from "../hooks/useOffer";
 
 const HostSpaceFormContainer = ({ isEdit = false, initialData = null }) => {
   const [space, setSpace] = useState(
@@ -39,6 +42,7 @@ const HostSpaceFormContainer = ({ isEdit = false, initialData = null }) => {
       bedRoomCount: 1,
       bedCount: 1,
       bathRoomCount: 1,
+      offer: [],
     }
   );
   const [images, setImages] = useState(
@@ -48,6 +52,7 @@ const HostSpaceFormContainer = ({ isEdit = false, initialData = null }) => {
       file: null,
     })) || []
   );
+  const { offerList } = useOffer();
 
   const [showPostcode, setShowPostcode] = useState(false);
   const [openConfirmDialog, setOpenConfirmDialog] = useState(false);
@@ -144,6 +149,15 @@ const HostSpaceFormContainer = ({ isEdit = false, initialData = null }) => {
     return uploadedUrls;
   };
 
+  const handleOfferChange = (offerId) => {
+    setSpace((prevSpace) => ({
+      ...prevSpace,
+      offer: prevSpace.offer.includes(offerId)
+        ? prevSpace.offer.filter((id) => id !== offerId)
+        : [...prevSpace.offer, offerId],
+    }));
+  };
+
   const handleConfirmSubmit = async () => {
     try {
       const uploadedImageUrls = await uploadImages();
@@ -159,6 +173,7 @@ const HostSpaceFormContainer = ({ isEdit = false, initialData = null }) => {
             ? parseInt(space.pricePerPerson.replace(/,/g, ""))
             : space.pricePerPerson,
         imageUrlList: uploadedImageUrls,
+        offer: space.offer,
       };
 
       if (isEdit) {
@@ -182,8 +197,8 @@ const HostSpaceFormContainer = ({ isEdit = false, initialData = null }) => {
       );
       navigate("/host/space");
     } catch (error) {
-      if (error) {
-        alert(error);
+      if (error.response.data.msg) {
+        alert(error.response.data.msg);
       } else {
         alert(
           isEdit ? "숙소 수정에 실패했습니다." : "숙소 등록에 실패했습니다."
@@ -463,6 +478,27 @@ const HostSpaceFormContainer = ({ isEdit = false, initialData = null }) => {
             <Grid item xs={12} md={4}>
               <ImageUploader images={images} setImages={setImages} />
             </Grid>
+            <Grid item xs={12}>
+              <Divider sx={{ my: 2 }} />
+              <Typography variant="h6" gutterBottom>
+                편의시설 및 서비스
+              </Typography>
+              <Grid container spacing={2}>
+                {offerList.map((offer) => (
+                  <Grid item xs={6} sm={4} md={3} key={offer.id}>
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          checked={space.offer.includes(offer.id)}
+                          onChange={() => handleOfferChange(offer.id)}
+                        />
+                      }
+                      label={offer.name}
+                    />
+                  </Grid>
+                ))}
+              </Grid>
+            </Grid>
             <Grid container justifyContent="flex-end">
               <Grid item>
                 <Button
@@ -476,7 +512,7 @@ const HostSpaceFormContainer = ({ isEdit = false, initialData = null }) => {
                     "&:hover": { backgroundColor: "#2AAADE" },
                   }}
                 >
-                  숙소 등록하기
+                  {isEdit ? "숙소 수정하기" : "숙소 등록하기"}
                 </Button>
               </Grid>
             </Grid>
@@ -497,7 +533,7 @@ const HostSpaceFormContainer = ({ isEdit = false, initialData = null }) => {
             left: "50%",
             transform: "translate(-50%, -50%)",
             width: 500,
-            height: 400,
+            height: 500,
             bgcolor: "background.paper",
             boxShadow: 24,
             p: 4,
@@ -512,10 +548,14 @@ const HostSpaceFormContainer = ({ isEdit = false, initialData = null }) => {
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title">{"숙소 등록 확인"}</DialogTitle>
+        <DialogTitle id="alert-dialog-title">
+          {isEdit ? "숙소 수정 확인" : "숙소 등록 확인"}
+        </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            입력하신 정보로 숙소를 등록하시겠습니까?
+            {isEdit
+              ? "입력하신 정보로 숙소를 수정하시겠습니까?"
+              : "입력하신 정보로 숙소를 등록하시겠습니까?"}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
