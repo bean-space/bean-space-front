@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import {
   Box,
   IconButton,
@@ -28,6 +28,7 @@ import PopularKeywords from "../components/PopularKeywords";
 import { useOffer } from "../hooks/useOffer";
 import RefreshRoundedIcon from "@mui/icons-material/RefreshRounded";
 import { addDays } from "date-fns";
+import { getPopularKeywords } from "../api/space";
 
 const SearchBar = () => {
   const { searchState, setSearchState } = useSearch();
@@ -50,6 +51,44 @@ const SearchBar = () => {
   const [showPopularSearches, setShowPopularSearches] = useState(false);
   const searchInputRef = useRef(null);
   const popularKeywordsRef = useRef(null);
+
+  const [popularKeywords, setPopularKeywords] = useState([]);
+  const [isLoadingKeywords, setIsLoadingKeywords] = useState(false);
+  const [lastSearchTime, setLastSearchTime] = useState(0);
+
+  const fetchPopularKeywords = useCallback(async () => {
+    setIsLoadingKeywords(true);
+    try {
+      const data = await getPopularKeywords();
+      setPopularKeywords(data.popularKeywordList);
+    } catch (error) {
+      if (error.response.data.msg) {
+        alert(error.response.data.msg);
+      } else {
+        alert("인기 검색어를 불러올 수 없습니다!");
+      }
+    } finally {
+      setIsLoadingKeywords(false);
+    }
+  }, []);
+
+  const handleSearchFocus = () => {
+    if (Date.now() - lastSearchTime > 300000) {
+      fetchPopularKeywords();
+    }
+  };
+
+  const handleSearchClick = () => {
+    setShowPopularSearches(true);
+    setLastSearchTime(Date.now());
+    handleSearchFocus();
+  };
+
+  const handleSearchBlur = () => {
+    if (!popularKeywordsRef.current?.contains(document.activeElement)) {
+      setTimeout(() => setShowPopularSearches(false), 200);
+    }
+  };
 
   useEffect(() => {
     setPriceRange([minPrice, maxPrice || 500000]);
@@ -128,6 +167,8 @@ const SearchBar = () => {
   };
 
   const handleSubmit = async () => {
+    setLastSearchTime(0);
+
     const queryParams = new URLSearchParams();
 
     if (searchKeyword.trim() !== "") {
@@ -172,31 +213,11 @@ const SearchBar = () => {
     navigate(`/space/search?${queryParams.toString()}`);
   };
 
-  const handleSearchFocus = () => {
-    setShowPopularSearches(true);
-  };
-
-  const handleSearchBlur = () => {
-    if (!popularKeywordsRef.current?.contains(document.activeElement)) {
-      setTimeout(() => setShowPopularSearches(false), 200);
-    }
-  };
-
   const handlePopularSearchSelect = (term) => {
     setSearchState((prev) => ({ ...prev, searchKeyword: term }));
     setShowPopularSearches(false);
     if (searchInputRef.current) {
       searchInputRef.current.focus();
-    }
-  };
-
-  const handleMouseEnter = () => {
-    setShowPopularSearches(true);
-  };
-
-  const handleMouseLeave = () => {
-    if (!searchInputRef.current?.contains(document.activeElement)) {
-      setShowPopularSearches(false);
     }
   };
 
@@ -245,11 +266,7 @@ const SearchBar = () => {
           }}
         >
           <ClickAwayListener onClickAway={() => setShowPopularSearches(false)}>
-            <Box
-              sx={{ position: "relative", flexGrow: 12, minWidth: "35%" }}
-              onMouseEnter={handleMouseEnter}
-              onMouseLeave={handleMouseLeave}
-            >
+            <Box sx={{ position: "relative", flexGrow: 12, minWidth: "35%" }}>
               <TextField
                 placeholder="시/도 및 시/군/구, 숙소 이름을 검색해주세요"
                 value={searchKeyword}
@@ -259,7 +276,7 @@ const SearchBar = () => {
                     searchKeyword: e.target.value,
                   }))
                 }
-                onFocus={handleSearchFocus}
+                onClick={handleSearchClick}
                 onBlur={handleSearchBlur}
                 inputRef={searchInputRef}
                 fullWidth
@@ -267,7 +284,11 @@ const SearchBar = () => {
               />
               {showPopularSearches && (
                 <div ref={popularKeywordsRef}>
-                  <PopularKeywords onSelect={handlePopularSearchSelect} />
+                  <PopularKeywords
+                    keywords={popularKeywords}
+                    isLoading={isLoadingKeywords}
+                    onSelect={handlePopularSearchSelect}
+                  />
                 </div>
               )}
             </Box>
