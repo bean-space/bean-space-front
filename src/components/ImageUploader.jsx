@@ -4,9 +4,18 @@ import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import DeleteIcon from "@mui/icons-material/Delete";
 
 const MAX_IMAGES = 5;
+const MAX_FILE_SIZE = 5 * 1024 * 1024;
 
 const ImageUploader = ({ images, setImages }) => {
-  const onDrop = (acceptedFiles) => {
+  const onDrop = (acceptedFiles, rejectedFiles) => {
+    rejectedFiles.forEach((file) => {
+      if (file.file.size > MAX_FILE_SIZE) {
+        alert(
+          `파일 '${file.file.name}'의 크기가 5MB를 초과합니다. 업로드할 수 없습니다.`
+        );
+      }
+    });
+
     setImages((prevImages) => {
       const remainingSlots = MAX_IMAGES - prevImages.length;
       const newImages = acceptedFiles.slice(0, remainingSlots).map((file) => ({
@@ -27,6 +36,7 @@ const ImageUploader = ({ images, setImages }) => {
       "image/webp": [".webp"],
     },
     disabled: images.length >= MAX_IMAGES,
+    maxSize: MAX_FILE_SIZE,
   });
 
   const onDragEnd = (result) => {
