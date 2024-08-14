@@ -3,7 +3,9 @@ import {
   Avatar,
   Box,
   Button,
+  Checkbox,
   CssBaseline,
+  FormControlLabel,
   Grid,
   Paper,
   TextField,
@@ -13,6 +15,9 @@ import RingVolumeTwoToneIcon from "@mui/icons-material/RingVolumeTwoTone";
 import { useNavigate } from "react-router-dom";
 import { updateSocialUserInfo } from "../api/auth";
 import { useAuth } from "../hooks/useAuth";
+import LegalModal from "./LegalModal";
+import { termsOfService } from "../assets/termsOfService";
+import { privacyPolicy } from "../assets/privacyPolicy";
 
 const SocialUserInfoFormContainer = () => {
   const navigate = useNavigate();
@@ -20,6 +25,11 @@ const SocialUserInfoFormContainer = () => {
 
   const [phoneNumber, setPhoneNumber] = useState("");
   const [email, setEmail] = useState("");
+
+  const [termsOpen, setTermsOpen] = useState(false);
+  const [privacyOpen, setPrivacyOpen] = useState(false);
+  const [termsAgreed, setTermsAgreed] = useState(false);
+  const [privacyAgreed, setPrivacyAgreed] = useState(false);
 
   useEffect(() => {
     if (!isLoggedIn || !isPhoneNumberEmpty) {
@@ -29,6 +39,11 @@ const SocialUserInfoFormContainer = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!termsAgreed || !privacyAgreed) {
+      alert("이용약관과 개인정보 처리방침에 동의해주세요.");
+      return;
+    }
 
     if (!phoneNumber || !email) {
       alert("모든 필드를 입력해주세요.");
@@ -130,6 +145,67 @@ const SocialUserInfoFormContainer = () => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                width: "100%",
+                mt: 2,
+              }}
+            >
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={termsAgreed}
+                    onChange={(e) => setTermsAgreed(e.target.checked)}
+                    name="termsAgreed"
+                  />
+                }
+                label={
+                  <Typography variant="body2">
+                    <span>이용약관 동의</span> {"("}
+                    <span
+                      onClick={() => setTermsOpen(true)}
+                      style={{
+                        cursor: "pointer",
+                        color: "#4a90e2",
+                        textDecoration: "none",
+                      }}
+                    >
+                      보기
+                    </span>
+                    {")"}
+                  </Typography>
+                }
+              />
+
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={privacyAgreed}
+                    onChange={(e) => setPrivacyAgreed(e.target.checked)}
+                    name="privacyAgreed"
+                  />
+                }
+                label={
+                  <Typography variant="body2">
+                    <span>개인정보 수집 및 이용 동의</span> {"("}
+                    <span
+                      onClick={() => setPrivacyOpen(true)}
+                      style={{
+                        cursor: "pointer",
+                        color: "#4a90e2",
+                        textDecoration: "none",
+                      }}
+                    >
+                      보기
+                    </span>
+                    {")"}
+                  </Typography>
+                }
+              />
+            </Box>
             <Button
               type="submit"
               fullWidth
@@ -147,6 +223,18 @@ const SocialUserInfoFormContainer = () => {
           </Box>
         </Box>
       </Grid>
+      <LegalModal
+        open={termsOpen}
+        handleClose={() => setTermsOpen(false)}
+        title="서비스 이용약관"
+        content={termsOfService}
+      />
+      <LegalModal
+        open={privacyOpen}
+        handleClose={() => setPrivacyOpen(false)}
+        title="개인정보 처리방침"
+        content={privacyPolicy}
+      />
     </Grid>
   );
 };
