@@ -6,14 +6,23 @@ import {
   Divider,
   Box,
 } from "@mui/material";
-import { format } from "date-fns";
+import { format, subDays } from "date-fns";
 import { Link } from "react-router-dom";
 
 const MyReservationList = ({
   reservation,
   showReviewButton,
   isCompletedReservation,
+  onCancelReservation,
 }) => {
+  const currentDate = new Date();
+  const checkInDate = new Date(reservation.checkIn);
+  const cancellationDeadline = subDays(checkInDate, 2);
+  const canCancel =
+    currentDate <= cancellationDeadline &&
+    !isCompletedReservation &&
+    !reservation.isCancelled;
+
   return (
     <Card sx={{ height: "100%", display: "flex", flexDirection: "column" }}>
       <CardContent
@@ -91,7 +100,7 @@ const MyReservationList = ({
           </Typography>
         </Box>
 
-        {isCompletedReservation && (
+        {isCompletedReservation ? (
           <Box sx={{ mt: "auto" }}>
             {showReviewButton ? (
               <Button
@@ -126,7 +135,30 @@ const MyReservationList = ({
               </Button>
             )}
           </Box>
-        )}
+        ) : canCancel ? (
+          <Box sx={{ mt: "auto" }}>
+            <Button
+              variant="contained"
+              color="secondary"
+              onClick={() =>
+                onCancelReservation(
+                  reservation.spaceId,
+                  reservation.reservationId
+                )
+              }
+              sx={{
+                width: "100%",
+                fontSize: "1rem",
+                backgroundColor: "#F17D7B",
+                textShadow: "0.5px 0.5px 0.5px #000",
+                color: "white",
+                "&:hover": { backgroundColor: "#F05552" },
+              }}
+            >
+              예약 취소
+            </Button>
+          </Box>
+        ) : null}
       </CardContent>
     </Card>
   );

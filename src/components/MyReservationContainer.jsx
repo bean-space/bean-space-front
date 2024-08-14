@@ -1,5 +1,8 @@
 import { useEffect, useState } from "react";
-import { getMemberReservationList } from "../api/reservation";
+import {
+  cancelReservation,
+  getMemberReservationList,
+} from "../api/reservation";
 import MyReservationList from "./MyReservationList";
 import {
   Container,
@@ -9,6 +12,12 @@ import {
   Grid,
   Typography,
   CircularProgress,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
+  Button,
 } from "@mui/material";
 import CancelTwoToneIcon from "@mui/icons-material/CancelTwoTone";
 import CheckCircleTwoToneIcon from "@mui/icons-material/CheckCircleTwoTone";
@@ -18,6 +27,18 @@ const MyReservationContainer = () => {
   const [reservations, setReservations] = useState([]);
   const [tabValue, setTabValue] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
+  const [reservationToCancel, setReservationToCancel] = useState(null);
+
+  const handleCancelReservation = (spaceId, reservationId) => {
+    setReservationToCancel({ spaceId, reservationId });
+    setOpenDeleteDialog(true);
+  };
+
+  const handleDeleteCancel = () => {
+    setOpenDeleteDialog(false);
+    setReservationToCancel(null);
+  };
 
   const fetchMyReservations = async () => {
     setLoading(true);
@@ -66,6 +87,24 @@ const MyReservationContainer = () => {
         (reservation) => reservation.isCancelled
       ),
     };
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (reservationToCancel) {
+      try {
+        await cancelReservation(reservationToCancel);
+        alert("예약이 취소되었습니다.");
+        fetchMyReservations();
+      } catch (error) {
+        if (error.response.data.msg) {
+          alert(error.response.data.msg);
+        } else {
+          alert("예약 취소 중 오류가 발생했습니다.");
+        }
+      }
+    }
+    setOpenDeleteDialog(false);
+    setReservationToCancel(null);
   };
 
   const { upcomingReservation, completedReservation, cancelledReservation } =
@@ -135,6 +174,7 @@ const MyReservationContainer = () => {
                     reservation={reservation}
                     showReviewButton={false}
                     isCompletedReservation={false}
+                    onCancelReservation={handleCancelReservation}
                   />
                 </Grid>
               ))
@@ -176,6 +216,25 @@ const MyReservationContainer = () => {
               ))
             : renderEmptyMessage())}
       </Grid>
+      <Dialog
+        open={openDeleteDialog}
+        onClose={handleDeleteCancel}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">{"예약 취소 확인"}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            정말로 이 예약을 취소하시겠습니까?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleDeleteCancel}>취소</Button>
+          <Button onClick={handleDeleteConfirm} autoFocus>
+            확인
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Container>
   );
 };

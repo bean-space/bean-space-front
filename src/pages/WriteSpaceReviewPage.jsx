@@ -59,11 +59,12 @@ const WriteSpaceReviewPage = () => {
       };
 
       await addReview({ review: reviewData, id: spaceId });
+
       alert("리뷰가 정상적으로 등록되었습니다");
       navigate(-1);
     } catch (error) {
       if (error.response.data.msg) {
-        alert(error.response.data.masg);
+        alert(error.response.data.msg);
       } else {
         alert("리뷰 작성에 실패했습니다");
       }
@@ -82,7 +83,6 @@ const WriteSpaceReviewPage = () => {
         setImages={setImages}
         handleSubmit={handleSubmit}
       />
-      a
     </div>
   );
 };
