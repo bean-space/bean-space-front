@@ -110,6 +110,7 @@ const SearchResultPage = () => {
     } else {
       newParams.delete("sort");
     }
+    newParams.set("page", 1);
     navigate({ search: newParams.toString() }, { replace: true });
   };
 
