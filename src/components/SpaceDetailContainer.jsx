@@ -577,6 +577,10 @@ const SpaceDetailContainer = ({
         <DialogContent>
           <DialogContentText>
             정말로 이 리뷰를 삭제하시겠습니까?
+            <br />
+            <Typography sx={{ color: "red" }}>
+              삭제 후 다시 리뷰를 작성할 수 없습니다
+            </Typography>
           </DialogContentText>
         </DialogContent>
         <DialogActions>

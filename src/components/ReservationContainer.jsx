@@ -35,7 +35,7 @@ const ReservationPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const { isLoggedIn, isPhoneNumberEmpty } = useAuth();
+  const { isLoggedIn, isPhoneNumberEmpty, role } = useAuth();
   const { space } = location.state || {};
   const searchParams = new URLSearchParams(location.search);
   const checkIn = searchParams.get("checkIn");
@@ -118,6 +118,11 @@ const ReservationPage = () => {
   };
 
   const handleReservation = async () => {
+    if (role === "ADMIN") {
+      alert("관리자는 예약이 불가능합니다!");
+      return;
+    }
+
     if (!isCouponValid()) {
       alert("쿠폰의 유효기간을 확인해주세요!");
       return;
