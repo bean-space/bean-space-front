@@ -20,6 +20,8 @@ import { getPresignedUrl } from "../api/image";
 import { signupUser } from "../api/auth";
 import KakaoIcon from "../assets/kakao-logo.png";
 
+const MAX_FILE_SIZE = 5 * 1024 * 1024;
+
 const SignupContainer = () => {
   const defaultTheme = createTheme();
   const { isLoggedIn } = useAuth();
@@ -33,7 +35,18 @@ const SignupContainer = () => {
   const [file, setFile] = useState(null);
   const [previewUrl, setPreviewUrl] = useState(null);
 
-  const onDrop = useCallback((acceptedFiles) => {
+  const onDrop = useCallback((acceptedFiles, rejectedFiles) => {
+    if (rejectedFiles && rejectedFiles.length > 0) {
+      rejectedFiles.forEach((file) => {
+        if (file.file.size > MAX_FILE_SIZE) {
+          alert(
+            `파일 '${file.file.name}'의 크기가 5MB를 초과합니다. 업로드할 수 없습니다.`
+          );
+        }
+      });
+      return;
+    }
+
     const file = acceptedFiles[0];
     setFile(file);
 
@@ -53,6 +66,7 @@ const SignupContainer = () => {
       "image/webp": [".webp"],
     },
     maxFiles: 1,
+    maxSize: MAX_FILE_SIZE,
   });
 
   const uploadImage = async () => {
