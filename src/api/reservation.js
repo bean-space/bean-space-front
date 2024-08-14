@@ -14,3 +14,11 @@ export const getMemberReservationList = async () => {
 
   return data;
 };
+
+export const cancelReservation = async ({ spaceId, reservationId }) => {
+  const response = await commonClient.delete(
+    `api/v1/spaces/${spaceId}/reservations/${reservationId}`
+  );
+
+  return response;
+};
