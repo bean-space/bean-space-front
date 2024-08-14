@@ -39,7 +39,7 @@ function Header() {
 
 const DefaultHeader = () => {
   return (
-    <AppBar position="fixed" sx={{ backgroundColor: "#F7EFDC" }}>
+    <AppBar position="fixed" sx={{ backgroundColor: "#D6E9F5" }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <Link to={"/"} style={{ textDecoration: "none" }}>
@@ -55,7 +55,7 @@ const DefaultHeader = () => {
               noWrap
               sx={{
                 mr: 2,
-                color: "black",
+                color: "#3e3e3e",
                 textDecoration: "none",
                 marginRight: 10,
               }}
@@ -76,13 +76,14 @@ const LoggedOutHeader = () => {
 
   const handleLoginClick = () => {
     if (location.pathname !== "/login") {
-      localStorage.setItem("previousUrl", location.pathname);
+      const fullUrl = location.pathname + location.search;
+      localStorage.setItem("previousUrl", fullUrl);
     }
     navigate("/login");
   };
 
   return (
-    <AppBar position="fixed" sx={{ backgroundColor: "#F7EFDC" }}>
+    <AppBar position="fixed" sx={{ backgroundColor: "#D6E9F5" }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <Link to={"/"} style={{ textDecoration: "none" }}>
@@ -98,7 +99,7 @@ const LoggedOutHeader = () => {
               noWrap
               sx={{
                 mr: 2,
-                color: "black",
+                color: "#3e3e3e",
                 textDecoration: "none",
                 marginRight: 10,
               }}
@@ -181,7 +182,7 @@ const MemberHeader = () => {
   ];
 
   return (
-    <AppBar position="fixed" sx={{ backgroundColor: "#F7EFDC" }}>
+    <AppBar position="fixed" sx={{ backgroundColor: "#D6E9F5" }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <Link to={"/"} style={{ textDecoration: "none" }}>
@@ -197,7 +198,7 @@ const MemberHeader = () => {
               noWrap
               sx={{
                 mr: 2,
-                color: "black",
+                color: "#3e3e3e",
                 textDecoration: "none",
                 marginRight: 10,
               }}
@@ -298,7 +299,7 @@ const HostHeader = () => {
   ];
 
   return (
-    <AppBar position="fixed" sx={{ backgroundColor: "#F7EFDC" }}>
+    <AppBar position="fixed" sx={{ backgroundColor: "#D6E9F5" }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <Link to={"/"} style={{ textDecoration: "none" }}>
@@ -314,7 +315,7 @@ const HostHeader = () => {
               noWrap
               sx={{
                 mr: 2,
-                color: "black",
+                color: "#3e3e3e",
                 textDecoration: "none",
                 marginRight: 10,
               }}
@@ -432,7 +433,7 @@ const AdminHeader = () => {
   const adminSettings = ["내 프로필", "로그아웃"];
 
   return (
-    <AppBar position="fixed" sx={{ backgroundColor: "#F7EFDC" }}>
+    <AppBar position="fixed" sx={{ backgroundColor: "#D6E9F5" }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <Link to={"/"} style={{ textDecoration: "none" }}>
@@ -448,7 +449,7 @@ const AdminHeader = () => {
               noWrap
               sx={{
                 mr: 2,
-                color: "black",
+                color: "#3e3e3e",
                 textDecoration: "none",
                 marginRight: 10,
               }}

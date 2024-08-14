@@ -409,7 +409,7 @@ const SpaceDetailContainer = ({
             {space.offerList && space.offerList.length > 0 && (
               <>
                 <Typography variant="h6" fontWeight={600} mb={2} gutterBottom>
-                  편의 시설
+                  편의 시설 및 서비스
                 </Typography>
                 <Grid container spacing={3}>
                   {space.offerList.map((offerId) => (
