@@ -28,7 +28,8 @@ const PopularKeywords = ({ keywords, isLoading, onSelect }) => {
     >
       <Box sx={{ bgcolor: "#2AAADE", color: "white", p: 2 }}>
         <Typography variant="h6" sx={{ display: "flex", alignItems: "center" }}>
-          <TrendingUpRoundedIcon sx={{ mr: 1 }} />한 주간 인기 검색어
+          <TrendingUpRoundedIcon sx={{ mr: 1 }} />
+          실시간 인기 검색어
         </Typography>
       </Box>
       {isLoading ? (
