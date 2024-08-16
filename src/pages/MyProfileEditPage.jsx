@@ -9,7 +9,7 @@ const MyProfileEditPage = () => {
 
   useEffect(() => {
     if (!isLoading && !isLoggedIn) {
-      alert("로그인만 사용자만 접근할 수 있는 페이지입니다");
+      alert("로그인한 사용자만 접근할 수 있는 페이지입니다");
       navigate("/");
     }
   }, [navigate, isLoggedIn, isLoading]);
