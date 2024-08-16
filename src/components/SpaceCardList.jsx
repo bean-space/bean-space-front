@@ -203,7 +203,7 @@ const SpaceCardList = ({ spaces, onSortChange, currentSortOption }) => {
                     {space.price.toLocaleString()} 원/ 1박
                   </Typography>
                   <Typography variant="body2" color="text.primary">
-                    기준 인원: {space.defaultPeople} 명
+                    최대 인원: {space.maxPeople} 명
                   </Typography>
                   <Typography
                     variant="body2"
