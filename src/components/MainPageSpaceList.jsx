@@ -138,11 +138,11 @@ const MainPageSpaceList = () => {
                     )}
                   </Carousel>
                 </Box>
-                <CardContent>
-                  <Link
-                    to={`/space/${space.spaceId}`}
-                    style={{ textDecoration: "none" }}
-                  >
+                <Link
+                  to={`/space/${space.spaceId}`}
+                  style={{ textDecoration: "none" }}
+                >
+                  <CardContent>
                     <Typography
                       gutterBottom
                       variant="h6"
@@ -160,21 +160,22 @@ const MainPageSpaceList = () => {
                     >
                       {space.listingName}
                     </Typography>
-                  </Link>
-                  <Typography variant="body1" color="black" fontWeight="bold">
-                    {space.price.toLocaleString()} 원 / 1박
-                  </Typography>
-                  <Typography variant="body2" color="text.primary">
-                    기준 인원: {space.defaultPeople} 명
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    color="text.secondary"
-                    textAlign="right"
-                  >
-                    {space.sidoAndSigungu}
-                  </Typography>
-                </CardContent>
+
+                    <Typography variant="body1" color="black" fontWeight="bold">
+                      {space.price.toLocaleString()} 원 / 1박
+                    </Typography>
+                    <Typography variant="body2" color="text.primary">
+                      기준 인원: {space.defaultPeople} 명
+                    </Typography>
+                    <Typography
+                      variant="body2"
+                      color="text.secondary"
+                      textAlign="right"
+                    >
+                      {space.sidoAndSigungu}
+                    </Typography>
+                  </CardContent>
+                </Link>
               </Card>
             </Grid>
           ))}
