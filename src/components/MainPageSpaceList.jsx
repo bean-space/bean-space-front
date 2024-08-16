@@ -61,7 +61,7 @@ const MainPageSpaceList = () => {
         gutterBottom
         sx={{ mb: 4, fontWeight: "bold" }}
       >
-        최근 일주일 간 가장 인기가 많은 공간
+        🔥 최근 일주일 예약 많은 공간 TOP4
       </Typography>
       {isLoading ? (
         <Box
