@@ -140,11 +140,11 @@ const SpaceCardList = ({ spaces, onSortChange, currentSortOption }) => {
                     )}
                   </Carousel>
                 </Box>
-                <CardContent>
-                  <Link
-                    to={`/space/${space.id}?${newQueryString}`}
-                    style={{ textDecoration: "none" }}
-                  >
+                <Link
+                  to={`/space/${space.id}?${newQueryString}`}
+                  style={{ textDecoration: "none" }}
+                >
+                  <CardContent>
                     <Typography
                       gutterBottom
                       variant="h6"
@@ -162,57 +162,58 @@ const SpaceCardList = ({ spaces, onSortChange, currentSortOption }) => {
                     >
                       {space.listingName}
                     </Typography>
-                  </Link>
-                  <Box
-                    sx={{
-                      display: "flex",
-                      alignItems: "center",
-                      mb: 1,
-                    }}
-                  >
-                    {space.averageRating > 0 ? (
-                      <>
-                        <Rating
-                          name="read-only"
-                          value={space.averageRating}
-                          readOnly
-                          precision={0.1}
-                          size="small"
-                          emptyIcon={
-                            <StarIcon
-                              style={{ opacity: 0.55 }}
-                              fontSize="inherit"
-                            />
-                          }
-                        />
-                        <Typography
-                          variant="body2"
-                          color="text.secondary"
-                          sx={{ ml: 1 }}
-                        >
-                          ({space.averageRating.toFixed(1)})
+
+                    <Box
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        mb: 1,
+                      }}
+                    >
+                      {space.averageRating > 0 ? (
+                        <>
+                          <Rating
+                            name="read-only"
+                            value={space.averageRating}
+                            readOnly
+                            precision={0.1}
+                            size="small"
+                            emptyIcon={
+                              <StarIcon
+                                style={{ opacity: 0.55 }}
+                                fontSize="inherit"
+                              />
+                            }
+                          />
+                          <Typography
+                            variant="body2"
+                            color="text.secondary"
+                            sx={{ ml: 1 }}
+                          >
+                            ({space.averageRating.toFixed(1)})
+                          </Typography>
+                        </>
+                      ) : (
+                        <Typography variant="body2" color="text.secondary">
+                          아직 리뷰가 없습니다
                         </Typography>
-                      </>
-                    ) : (
-                      <Typography variant="body2" color="text.secondary">
-                        아직 리뷰가 없습니다
-                      </Typography>
-                    )}
-                  </Box>
-                  <Typography variant="body1" color="black" fontWeight="bold">
-                    {space.price.toLocaleString()} 원/ 1박
-                  </Typography>
-                  <Typography variant="body2" color="text.primary">
-                    최대 인원: {space.maxPeople} 명
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    color="text.secondary"
-                    textAlign={"right"}
-                  >
-                    {space.sidoAndSigungu}
-                  </Typography>
-                </CardContent>
+                      )}
+                    </Box>
+                    <Typography variant="body1" color="black" fontWeight="bold">
+                      {space.price.toLocaleString()} 원/ 1박
+                    </Typography>
+                    <Typography variant="body2" color="text.primary">
+                      최대 인원: {space.maxPeople} 명
+                    </Typography>
+                    <Typography
+                      variant="body2"
+                      color="text.secondary"
+                      textAlign={"right"}
+                    >
+                      {space.sidoAndSigungu}
+                    </Typography>
+                  </CardContent>
+                </Link>
               </Card>
             </Grid>
           ))}

@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback, useMemo } from "react";
+import { useEffect, useState, useCallback, useMemo, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { searchSpaces } from "../api/space";
 import Pagination from "@mui/material/Pagination";
@@ -6,6 +6,7 @@ import SpaceCardList from "../components/SpaceCardList";
 import SearchBar from "../components/SearchBar";
 import { Box, CircularProgress } from "@mui/material";
 import { useSearch } from "../hooks/useSearch";
+import { addDays } from "date-fns";
 
 const SearchResultPage = () => {
   const { searchState, updateSearchState } = useSearch();
@@ -14,6 +15,7 @@ const SearchResultPage = () => {
   const [spaces, setSpaces] = useState([]);
   const [totalPages, setTotalPages] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
+  const isInitialMount = useRef(true);
 
   const queryParams = useMemo(
     () => new URLSearchParams(location.search),
@@ -46,7 +48,7 @@ const SearchResultPage = () => {
 
   useEffect(() => {
     updateSearchState({ sortOption: currentSort });
-  }, [currentSort, updateSearchState]);
+  }, [currentSort]);
 
   const getSortParam = (option) => {
     switch (option) {
@@ -121,6 +123,37 @@ const SearchResultPage = () => {
       navigate({ search: newParams.toString() }, { replace: true });
     }
   };
+
+  useEffect(() => {
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+
+      const tomorrow = addDays(new Date(), 1);
+      const dayAfterTomorrow = addDays(new Date(), 2);
+
+      const initialSearchState = {
+        searchKeyword: queryParams.get("keyword") || "",
+        peopleCount: parseInt(queryParams.get("headCount"), 10) || 1,
+        dateRange: {
+          startDate: queryParams.get("checkIn")
+            ? new Date(queryParams.get("checkIn"))
+            : tomorrow,
+          endDate: queryParams.get("checkOut")
+            ? new Date(queryParams.get("checkOut"))
+            : dayAfterTomorrow,
+          key: "selection",
+        },
+        sortOption: currentSort,
+        minPrice: parseInt(queryParams.get("priceMin"), 10) || 0,
+        maxPrice: parseInt(queryParams.get("priceMax"), 10) || 500000,
+        bedrooms: parseInt(queryParams.get("bedRoomCount"), 10) || 0,
+        beds: parseInt(queryParams.get("bedCount"), 10) || 0,
+        bathrooms: parseInt(queryParams.get("bathRoomCount"), 10) || 0,
+        offers: queryParams.getAll("offer").map(Number) || [],
+      };
+      updateSearchState(initialSearchState);
+    }
+  }, [queryParams, currentSort, updateSearchState]);
 
   return (
     <div style={{ marginTop: "100px" }}>
