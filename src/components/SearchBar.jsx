@@ -27,7 +27,6 @@ import DateRangePicker from "./DateRangePicker";
 import PopularKeywords from "../components/PopularKeywords";
 import { useOffer } from "../hooks/useOffer";
 import RefreshRoundedIcon from "@mui/icons-material/RefreshRounded";
-import { addDays } from "date-fns";
 import { getPopularKeywords } from "../api/space";
 
 const SearchBar = () => {
@@ -225,16 +224,13 @@ const SearchBar = () => {
 
   const handleResetFilters = () => {
     setSearchState((prevState) => ({
-      searchKeyword: prevState.searchkeyword,
-      peopleCount: prevState.peopleCount,
-      dateRange: prevState.dateRange,
+      ...prevState,
       minPrice: 0,
       maxPrice: 500000,
       offers: [],
       bedrooms: 0,
       beds: 0,
       bathrooms: 0,
-      sortOption: prevState.sortOption,
     }));
     setPriceRange([0, 500000]);
   };
