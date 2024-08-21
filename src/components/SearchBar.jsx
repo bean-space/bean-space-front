@@ -440,7 +440,7 @@ const SearchBar = () => {
                 </Grid>
                 <Grid item xs={4}>
                   <Typography variant="subtitle1" gutterBottom>
-                    화장실
+                    욕실
                   </Typography>
                   <FormControl fullWidth>
                     <Select

@@ -61,18 +61,64 @@ const HostSpaceFormContainer = ({ isEdit = false, initialData = null }) => {
   const handleOpenConfirmDialog = (e) => {
     e.preventDefault();
 
-    if (Object.values(space).some((value) => value === "")) {
-      alert("모든 필드를 채워주세요.");
+    if (space.listingName.length < 2 || space.listingName.length > 30) {
+      alert("공간 이름은 2~30자 사이여야 합니다.");
+      return;
+    }
+
+    if (space.content.length < 10 || space.content.length > 5000) {
+      alert("공간 소개글은 10~5000자 사이여야 합니다.");
+      return;
+    }
+
+    if (images.length < 1 || images.length > 5) {
+      alert("공간 이미지는 최소 1개, 최대 5개까지 등록 가능합니다.");
+      return;
+    }
+
+    if (space.bedRoomCount < 0 || space.bedRoomCount > 99) {
+      alert("침실 갯수는 0~99 사이여야 합니다.");
+      return;
+    }
+
+    if (space.bedCount < 0 || space.bedCount > 99) {
+      alert("침대 갯수는 0~99 사이여야 합니다.");
+      return;
+    }
+
+    if (space.bathRoomCount < 0 || space.bathRoomCount > 99) {
+      alert("욕실 갯수는 0~99 사이여야 합니다.");
+      return;
+    }
+
+    if (space.defaultPeople < 1 || space.defaultPeople > 99) {
+      alert("기본 인원은 1~99명 사이여야 합니다.");
+      return;
+    }
+
+    if (space.maxPeople < 1 || space.maxPeople > 99) {
+      alert("최대 인원은 1~99명 사이여야 합니다.");
+      return;
+    }
+
+    const price = parseInt(space.price.replace(/,/g, ""));
+    if (isNaN(price) || price < 1 || price > 50000000) {
+      alert("1박 가격은 1원에서 50,000,000원 사이여야 합니다.");
+      return;
+    }
+
+    const pricePerPerson = parseInt(space.pricePerPerson.replace(/,/g, ""));
+    if (
+      isNaN(pricePerPerson) ||
+      pricePerPerson < 0 ||
+      pricePerPerson > 10000000
+    ) {
+      alert("인원 추가 가격은 0원에서 10,000,000원 사이여야 합니다.");
       return;
     }
 
     if (space.maxPeople < space.defaultPeople) {
       alert("최대 인원은 기본 인원보다 크거나 같아야 합니다.");
-      return;
-    }
-
-    if (images.length === 0) {
-      alert("최소 1장의 사진을 업로드해주세요.");
       return;
     }
 
