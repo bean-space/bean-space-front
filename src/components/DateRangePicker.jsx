@@ -34,7 +34,7 @@ const DateRangePicker = ({ dateRange, onDateRangeChange }) => {
 
     if (isBefore(date, today)) return true;
 
-    const sixMonthsLater = addMonths(today, 6);
+    const sixMonthsLater = addDays(addMonths(today, 6), -1);
     if (isAfter(date, sixMonthsLater)) return true;
 
     if (!currentDateRange.startDate) {
